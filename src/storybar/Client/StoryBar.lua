@@ -7,7 +7,7 @@
 	![Story Bar Gif](/evenmore/storybar/bar.gif)
 ]=]
 
--- Ico: rbxasset://textures/ui/InspectMenu/ico_inspect@2x.png
+-- TODO: Collapsible UI, using ico 'rbxasset://textures/ui/InspectMenu/ico_inspect@2x.png'.
 
 local require = require(script.Parent.loader).load(script)
 

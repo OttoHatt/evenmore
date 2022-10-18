@@ -25,9 +25,9 @@ function ButtonBarElement.new(serviceBag)
 	self.Pressed = Signal.new()
 	self._maid:GiveTask(self.Pressed)
 
-	self._label = Instance.new("StringValue")
-	self._label.Value = "Button"
-	self._maid:GiveTask(self._label)
+	self._labelText = Instance.new("StringValue")
+	self._labelText.Value = "Button"
+	self._maid:GiveTask(self._labelText)
 
 	self._label = Instance.new("ObjectValue")
 	self._maid:GiveTask(self._label)
@@ -55,16 +55,16 @@ end
 	@param text string
 ]=]
 function ButtonBarElement:SetLabel(text: string)
-	self._label.Value = text
+	self._labelText.Value = text
 end
 
 function ButtonBarElement:_updateSize()
 	local paddingWidth = self:GetPadding()
 
-	local label = self._label.Value
+	local label: TextLabel = self._label.Value
 	local textSize = TextServiceUtils.getSizeForLabel(label, label.Text)
 
-	self:GetSizeValue().Value = Vector3.new(paddingWidth * 2 + textSize.X, 32, 0)
+	self:GetSizeValue().Value = Vector3.new(paddingWidth * 2 + textSize.X, self._height, 0)
 end
 
 function ButtonBarElement:_render(gui: Instance)
@@ -85,7 +85,7 @@ function ButtonBarElement:_render(gui: Instance)
 						FontSize = Enum.FontSize.Size18,
 						Position = UDim2.new(0, 0, 0.5, 0),
 						Size = UDim2.new(1, 0, 1, 0),
-						Text = self._label,
+						Text = self._labelText,
 						TextColor3 = self._colorTheming:ObserveColor("Glyph"),
 						TextXAlignment = Enum.TextXAlignment.Left,
 						TextYAlignment = Enum.TextYAlignment.Center,

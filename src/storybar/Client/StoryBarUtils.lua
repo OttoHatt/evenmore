@@ -68,7 +68,7 @@ end
 function StoryBarUtils.createButton(storyBar, name: string, callback)
 	local button = ButtonBarElement.new(storyBar._serviceBag)
 
-	button:SetText(name)
+	button:SetLabel(name)
 	if callback then
 		storyBar._maid:GiveTask(button.Pressed:Connect(callback))
 	end
@@ -90,7 +90,7 @@ end
 function StoryBarUtils.createSwitch(storyBar, name: string, default: boolean, callback: (boolean) -> ())
 	local switch = SwitchBarElement.new(storyBar._serviceBag)
 
-	switch:SetText(name)
+	switch:SetLabel(name)
 	switch:SetValue(default)
 	if callback then
 		storyBar._maid:GiveTask(switch:Observe():Subscribe(callback))
@@ -112,7 +112,7 @@ end
 ]=]
 function StoryBarUtils.createSlider(storyBar, name, default: number, callback)
 	local slider = SliderBarElement.new(storyBar._serviceBag, default)
-	slider:SetText(name)
+	slider:SetLabel(name)
 	if callback then
 		storyBar._maid:GiveTask(slider:Observe():Subscribe(callback))
 	end

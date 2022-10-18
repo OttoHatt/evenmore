@@ -8,6 +8,7 @@
 
 local require = require(script.Parent.loader).load(script)
 
+local ELEMENT_HEIGHT = 32
 local PADDING = 8
 
 local BaseObject = require("BaseObject")
@@ -26,6 +27,8 @@ function BaseBarElement.new(serviceBag)
 
 	self._sizeValue = Instance.new("Vector3Value")
 	self._maid:GiveTask(self._sizeValue)
+
+	self._height = ELEMENT_HEIGHT
 
 	self._maid:GiveTask(self:_renderBase():Subscribe(function(gui)
 		self.Gui = gui

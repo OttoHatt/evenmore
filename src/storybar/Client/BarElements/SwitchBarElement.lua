@@ -22,9 +22,9 @@ SwitchBarElement.__index = SwitchBarElement
 function SwitchBarElement.new(serviceBag)
 	local self = setmetatable(BaseBarElement.new(serviceBag), SwitchBarElement)
 
-	self._text = Instance.new("StringValue")
-	self._text.Value = "Switch"
-	self._maid:GiveTask(self._text)
+	self._labelText = Instance.new("StringValue")
+	self._labelText.Value = "Switch"
+	self._maid:GiveTask(self._labelText)
 
 	self._value = Instance.new("BoolValue")
 	self._value.Value = false
@@ -78,8 +78,8 @@ end
 	@within SwitchBarElement
 	@param text string
 ]=]
-function SwitchBarElement:SetText(text: string)
-	self._text.Value = text
+function SwitchBarElement:SetLabel(text: string)
+	self._labelText.Value = text
 end
 
 function SwitchBarElement:_updateLayout()
@@ -137,7 +137,7 @@ function SwitchBarElement:_render(gui: Instance)
 						FontSize = Enum.FontSize.Size18,
 						Position = UDim2.new(0, 0, 0.5, 0),
 						Size = UDim2.new(1, 0, 1, 0),
-						Text = self._text,
+						Text = self._labelText,
 						TextColor3 = self._colorTheming:ObserveColor("Glyph"),
 						TextXAlignment = Enum.TextXAlignment.Left,
 						TextYAlignment = Enum.TextYAlignment.Center,

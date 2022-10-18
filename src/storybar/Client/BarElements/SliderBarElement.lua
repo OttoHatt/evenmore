@@ -29,9 +29,9 @@ SwitchBarElement.__index = SwitchBarElement
 function SwitchBarElement.new(serviceBag, initialValue: number)
 	local self = setmetatable(BaseBarElement.new(serviceBag), SwitchBarElement)
 
-	self._label = Instance.new("StringValue")
-	self._label.Value = "Slider"
-	self._maid:GiveTask(self._label)
+	self._labelText = Instance.new("StringValue")
+	self._labelText.Value = "Slider"
+	self._maid:GiveTask(self._labelText)
 
 	self._value = Instance.new("NumberValue")
 	self._value.Value = initialValue or 0
@@ -52,15 +52,15 @@ function SwitchBarElement.new(serviceBag, initialValue: number)
 		local collector: Instance = brio:GetValue()
 		local maid = brio:ToMaid()
 		if collector:IsA("PluginGui") then
-			self:_update(collector:GetRelativeMousePosition())
+			self:_updateMouse(collector:GetRelativeMousePosition())
 			maid:GiveTask(RunService.RenderStepped:Connect(function()
-				self:_update(collector:GetRelativeMousePosition())
+				self:_updateMouse(collector:GetRelativeMousePosition())
 			end))
 		elseif collector:IsA("ScreenGui") then
-			self:_update(UserInputService:GetMouseLocation())
+			self:_updateMouse(UserInputService:GetMouseLocation())
 			maid:GiveTask(UserInputService.InputChanged:Connect(function(inputObject: InputObject)
 				if inputObject.UserInputType == Enum.UserInputType.MouseMovement then
-					self:_update(UserInputService:GetMouseLocation())
+					self:_updateMouse(UserInputService:GetMouseLocation())
 				end
 			end))
 		end
@@ -74,9 +74,9 @@ function SwitchBarElement.new(serviceBag, initialValue: number)
 	return self
 end
 
-function SwitchBarElement:_updateMovement(raw: Vector2 & Vector3)
+function SwitchBarElement:_updateMouse(rawPosition: Vector2 & Vector3)
 	if self._acceptingInput.Value then
-		local pos = Vector2.new(raw.X, raw.Y)
+		local pos = Vector2.new(rawPosition.X, rawPosition.Y)
 		local slider = self._slider.Value
 		local off = pos - slider.AbsolutePosition
 		local fac = math.clamp(off.X / slider.AbsoluteSize.X, 0, 1)
@@ -118,11 +118,10 @@ end
 	@param text string
 ]=]
 function SwitchBarElement:SetLabel(text: string)
-	self._label.Value = text
+	self._labelText.Value = text
 end
 
 function SwitchBarElement:_updateLayout()
-	local ELEMENT_HEIGHT = 32
 	local paddingWidth = self:GetPadding()
 
 	local label = self._label.Value
@@ -134,7 +133,7 @@ function SwitchBarElement:_updateLayout()
 	slider.Size = UDim2.new(0, SLIDER_WIDTH, 1, 0)
 	slider.Position = UDim2.new(0, textSize.X + 4 + 4, 0, 0)
 
-	self:GetSizeValue().Value = Vector3.new(SLIDER_WIDTH + 8 + 4 + paddingWidth * 2 + textSize.X, ELEMENT_HEIGHT, 0)
+	self:GetSizeValue().Value = Vector3.new(SLIDER_WIDTH + 8 + 4 + paddingWidth * 2 + textSize.X, self._height, 0)
 end
 
 function SwitchBarElement:_render(gui: Instance)
@@ -147,12 +146,12 @@ function SwitchBarElement:_render(gui: Instance)
 				[Blend.OnEvent("InputBegan")] = function(inputObject: InputObject)
 					if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 						self._acceptingInput.Value = true
-						self:_updateMovement(inputObject.Position)
+						self:_updateMouse(inputObject.Position)
 						self._maid._cancel = inputObject.Changed:Connect(function()
 							if inputObject.UserInputState == Enum.UserInputState.End then
 								self._maid._cancel = nil
 								self._acceptingInput.Value = false
-								self:_updateMovement(inputObject.Position)
+								self:_updateMouse(inputObject.Position)
 							end
 						end)
 					end
@@ -166,7 +165,7 @@ function SwitchBarElement:_render(gui: Instance)
 						FontSize = Enum.FontSize.Size18,
 						Position = UDim2.new(0, 0, 0.5, 0),
 						Size = UDim2.new(1, 0, 1, 0),
-						Text = self._label,
+						Text = self._labelText,
 						TextColor3 = self._colorTheming:ObserveColor("Glyph"),
 						TextXAlignment = Enum.TextXAlignment.Left,
 						TextYAlignment = Enum.TextYAlignment.Center,
