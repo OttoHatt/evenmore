@@ -1,11 +1,11 @@
 <div align="center">
-	<img src=".moonwave/static/logo.svg" height="60" alt="Evenmore logo"/>
-	<br/><br/><br/>
+	<img src=".moonwave/static/logo.svg" height="80" alt="Evenmore logo"/>
+	<hr/>
 </div>
 
 <!--moonwave-hide-before-this-line-->
 
-A collection of *even more* [Nevermore](https://github.com/Quenty/NevermoreEngine)-esque modules.
+A collection of yet *even more* [Nevermore](https://github.com/Quenty/NevermoreEngine) packages.
 
 The packages in this monorepo are more than just utilities, each provides a complete-ish feature. They're generic enough to be used in (almost) any game! Hopefully this will make your game development easier and funner.
 
@@ -24,19 +24,17 @@ git submodule add https://github.com/ottohatt/evenmore lib/evenmore
 The synced files must be placed inside your boostrapped folder, adjacent to Nevermore packages. For example, in your [Rojo](https://github.com/rojo-rbx/rojo) `project.json` file.
 ```json
 "packages": {
-		"$className": "Folder",
-		// Dependencies.
-		"@quenty": {
-			"$path": "lib/nevermore/"
-		},
-		"@ottohatt": {
-			"$path": "lib/evenmore/"
-		},
-		// Your project's code.
-		"game": {
-			"$path": "src/"
-		}
+	"$className": "Folder",
+	"@quenty": {
+		"$path": "lib/nevermore/"
+	},
+	"@ottohatt": {
+		"$path": "lib/evenmore/"
+	},
+	"game": {
+		"$path": "src/"
 	}
+}
 ```
 
 ## Contributions
