@@ -1,0 +1,22 @@
+title = "Evenmore"  # From Git
+gitRepoUrl = "https://github.com/ottohatt/evenmore" # From Git
+gitSourceBranch = "master"
+projectName = "Evenmore"
+url = "https://ottohatt.github.io/"
+tagline = "Nevermore-based utilities to make game development faster"
+autoSectionPath = "src"
+
+[docusaurus]
+onBrokenLinks = "throw"
+onBrokenMarkdownLinks = "warn"
+organizationName = "OttoHatt"
+baseUrl = "/evenmore/"
+favicon = "/favicon.ico"
+
+[home]
+enabled = false
+includeReadme = true
+
+[footer]
+style = "dark"
+copyright = "Copyright © 2022 OttoHatt. Built with Moonwave and Docusaurus."
