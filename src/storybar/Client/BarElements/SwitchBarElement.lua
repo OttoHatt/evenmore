@@ -48,6 +48,7 @@ end
 
 --[=[
 	Set the switch's current value.
+	@private
 	@within SwitchBarElement
 	@return boolean
 ]=]
