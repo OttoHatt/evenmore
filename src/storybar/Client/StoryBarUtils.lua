@@ -1,5 +1,6 @@
 --[=[
 	@class StoryBarUtils
+	@client
 
 	Utils for creating story bar, then attaching elements to it.
 

@@ -1,8 +1,11 @@
 --[=[
 	@class StoryBar
+	@client
 
-	Cute little bar for use with [Hoarcekat](https://github.com/Kampfkarren/hoarcekat) stories.
-	To create as little boilerplate as possible in your stories, it's reccomended that you use [StoryBarUtils] to construct the bar and its child elements.
+	When testing UI in [Hoarcekat](https://github.com/Kampfkarren/hoarcekat) stories, we often want to tweak and experiment with it;
+	showing/hiding, changing scale, triggering events, etc.
+
+	This module makes this functionality easy, providing a set of pre-made buttons & sliders with callbacks. Along with [StoryBarUtils], boilerplate is kept to a minimum.
 
 	![Story Bar Gif](/evenmore/storybar/bar.gif)
 ]=]

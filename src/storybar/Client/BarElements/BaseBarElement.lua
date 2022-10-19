@@ -2,6 +2,7 @@
 	@class BaseBarElement
 	@private
 	@ignore
+	@client
 
 	Base element for story bar.
 ]=]

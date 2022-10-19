@@ -1,6 +1,7 @@
 --[=[
 	@class SwitchBarElement
 	@private
+	@client
 
 	Like a [ButtonBarElement], but with a toggleable state. Slots into a [StoryBar].
 	You won't want to create this directly; see [StoryBarUtils].
@@ -47,6 +48,24 @@ function SwitchBarElement.new(serviceBag)
 end
 
 --[=[
+	Observe the switch's current value.
+	@within SwitchBarElement
+	@return Observable<boolean>
+]=]
+function SwitchBarElement:Observe()
+	return RxValueBaseUtils.observeValue(self._value)
+end
+
+--[=[
+	Set the label text.
+	@within SwitchBarElement
+	@param text string
+]=]
+function SwitchBarElement:SetLabel(text: string)
+	self._labelText.Value = text
+end
+
+--[=[
 	Set the switch's current value.
 	@private
 	@within SwitchBarElement
@@ -63,24 +82,6 @@ end
 ]=]
 function SwitchBarElement:GetValue()
 	return self._value.Value
-end
-
---[=[
-	Observe the switch's current value.
-	@within SwitchBarElement
-	@return Observable<boolean>
-]=]
-function SwitchBarElement:Observe()
-	return RxValueBaseUtils.observeValue(self._value)
-end
-
---[=[
-	Set the label text.
-	@within SwitchBarElement
-	@param text string
-]=]
-function SwitchBarElement:SetLabel(text: string)
-	self._labelText.Value = text
 end
 
 function SwitchBarElement:_updateLayout()

@@ -1,6 +1,7 @@
 --[=[
 	@class ButtonBarElement
 	@private
+	@client
 
 	Clickable button that slots into a [StoryBar].
 	You won't want to create this directly; see [StoryBarUtils].

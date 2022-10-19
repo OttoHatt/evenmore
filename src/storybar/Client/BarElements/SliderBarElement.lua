@@ -1,6 +1,7 @@
 --[=[
 	@class SliderBarElement
 	@private
+	@client
 
 	Linear value slider that slots into a [StoryBar].
 	You won't want to create this directly; see [StoryBarUtils].
@@ -94,6 +95,15 @@ function SwitchBarElement:Observe()
 end
 
 --[=[
+	Set the label text.
+	@within SliderBarElement
+	@param text string
+]=]
+function SwitchBarElement:SetLabel(text: string)
+	self._labelText.Value = text
+end
+
+--[=[
 	Set the slider's current value.
 	@private
 	@within SliderBarElement
@@ -110,15 +120,6 @@ end
 ]=]
 function SwitchBarElement:GetValue()
 	return self._value.Value
-end
-
---[=[
-	Set the label text.
-	@within SliderBarElement
-	@param text string
-]=]
-function SwitchBarElement:SetLabel(text: string)
-	self._labelText.Value = text
 end
 
 function SwitchBarElement:_updateLayout()

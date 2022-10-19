@@ -1,7 +1,8 @@
 --[=[
 	@class StoryBarPaneUtils
+	@client
 
-	Utils for glueing story bar elements to Nevermore BasicPanes. State is observed, allowing a switch to both control and respond.
+	Utils for glueing story bar elements to Nevermore BasicPanes. State is observed, allowing elements to control and respond.
 
 	![Switch Controlling Basic Pane Visibility Gif](/evenmore/storybar/basicpaneswitch.gif)
 ]=]
