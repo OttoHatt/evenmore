@@ -1,0 +1,23 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Meta name="ExplicitAutoJoints">true</Meta>
+	<External>null</External>
+	<External>nil</External>
+	<Item class="Folder" referent="RBX9BD7348F5A3E48038F7FDD4304A05A47">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<string name="Name">SoundscapeTagList</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<BinaryString name="Tags">VGFnRWRpdG9yVGFnQ29udGFpbmVy</BinaryString>
+		</Properties>
+		<Item class="Configuration" referent="RBX0F92C255B6AB4D65AFBDB7D920A326CB">
+			<Properties>
+				<BinaryString name="AttributesSerialize"><![CDATA[BgAAAAsAAABBbHdheXNPblRvcAMABQAAAENvbG9yD3HioD444aU+0p5rPwgAAABEcmF3VHlw
+ZQIDAAAAQm94BQAAAEdyb3VwAgoAAABTb3VuZHNjYXBlBAAAAEljb24CBQAAAHNvdW5kBwAA
+AFZpc2libGUDAQ==]]></BinaryString>
+				<string name="Name">SoundscapeTrigger</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+		</Item>
+	</Item>
+</roblox>
