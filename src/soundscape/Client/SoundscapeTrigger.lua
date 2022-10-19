@@ -40,7 +40,7 @@ function SoundscapeTrigger.new(bound: any)
 
 	self._aabb = CompiledBoundingBoxUtils.compileBBox(cframe, size)
 	self._name = self._obj:GetAttribute(ATTRIBUTE_NAME)
-	self._volume = size.Magnitude
+	self._volume = size.X * size.Y * size.Z
 
 	return self
 end
