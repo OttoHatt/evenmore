@@ -14,7 +14,6 @@ local ObservableMap = require("ObservableMap")
 local RxBrioUtils = require("RxBrioUtils")
 local SoundScriptConstants = require("SoundScriptConstants")
 local Maid = require("Maid")
-local Rx = require("Rx")
 
 local SoundScriptRegistryServiceClient = {}
 
@@ -30,17 +29,17 @@ function SoundScriptRegistryServiceClient:Init(serviceBag)
 	self._soundScriptMap = ObservableMap.new()
 	self._maid:GiveTask(self._soundScriptMap)
 
-	-- Load all of our default scripts.
+	-- Load all of our stock SoundScripts.
 	for name, soundScript in SoundScriptConstants do
 		self:RegisterSoundScript(name, soundScript)
 	end
 end
 
 --[=[
-    Registers a [SoundScript] to be used by [SoundscapeTrigger]s.
+	Registers a [SoundScript] to be used by [SoundscapeTrigger]s.
 
-    @param name string
-    @param soundScript SoundScript
+	@param name string -- Arbitrary, just used as a way to identify this [SoundScript].
+	@param soundScript SoundScript
 ]=]
 function SoundScriptRegistryServiceClient:RegisterSoundScript(name: string, soundScript: table)
 	-- TODO: More in-depth typechecking of SoundScripts.
@@ -53,15 +52,18 @@ function SoundScriptRegistryServiceClient:RegisterSoundScript(name: string, soun
 end
 
 --[=[
-    Observes the contents of a [SoundScript] inside the registry given its name.
+	Observe the contents of a [SoundScript] given its name inside the registry.
+	If not found, the Observable won't complete.
 
-    @param name string
-    @return Observable<Brio<SoundScript?>>
+	@param name string
+	@return Observable<Brio<SoundScript>>
 ]=]
 function SoundScriptRegistryServiceClient:ObserveSoundScriptBrio(name: string)
 	return self._soundScriptMap:ObserveValueForKey(name):Pipe({
-		Rx.defaultsToNil,
 		RxBrioUtils.switchToBrio,
+		RxBrioUtils.where(function(value)
+			return value ~= nil
+		end),
 	})
 end
 

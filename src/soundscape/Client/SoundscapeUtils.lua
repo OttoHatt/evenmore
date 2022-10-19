@@ -12,7 +12,7 @@ local random = Random.new()
 --[=[
     Evaluates a value defined in a soundscript. Supports defualt values, defined values, and values picked randomly in a range.
 
-    @param value nil | number | table -- Value to evaluate
+    @param value nil | number | {number} -- Value to evaluate
     @param default number? -- Fallback value
     @return number
 ]=]

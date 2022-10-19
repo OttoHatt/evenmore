@@ -7,8 +7,7 @@
 
 local require = require(script.Parent.loader).load(script)
 
-local DEFAULT_SOUNDSCAPE_NAME = "default"
-local DEFAULT_MASTER_VOLUME = 0.15
+local INITIAL_MASTER_VOLUME = 0.15
 local UPDATE_SOUNDSCAPE_HZ = 5
 
 local SoundService = game:GetService("SoundService")
@@ -18,9 +17,10 @@ local Rx = require("Rx")
 local RxBrioUtils = require("RxBrioUtils")
 local SoundscapeBindersClient = require("SoundscapeBindersClient")
 local SoundscapeUtils = require("SoundscapeUtils")
-local RxValueBaseUtils = require("RxValueBaseUtils")
 local SoundScriptRegistryServiceClient = require("SoundScriptRegistryServiceClient")
 local FocalPointUtils = require("FocalPointUtils")
+local StateStack = require("StateStack")
+local Blend = require("Blend")
 
 local SoundscapeServiceClient = {}
 
@@ -36,9 +36,11 @@ function SoundscapeServiceClient:Init(serviceBag)
 
 	self._maid = Maid.new()
 
-	self._currentSoundscapeName = Instance.new("StringValue")
-	self._currentSoundscapeName.Value = DEFAULT_SOUNDSCAPE_NAME
-	self._maid:GiveTask(self._currentSoundscapeName)
+	-- We need a stack so that we can revert the setting when a SoundScape is dropped.
+	-- Grab the initial value from the service, it's probably 'NoReverb' anyways...
+	-- TODO: Account for users changing the Reverb setting themselves.
+	self._reverbStack = StateStack.new(SoundService.AmbientReverb)
+	self._maid:GiveTask(self._reverbStack)
 end
 
 --[=[
@@ -47,24 +49,19 @@ end
 function SoundscapeServiceClient:Start()
 	self._soundGroup = Instance.new("SoundGroup")
 	self._soundGroup.Name = "Soundscape"
-	self._soundGroup.Volume = DEFAULT_MASTER_VOLUME
+	self._soundGroup.Volume = INITIAL_MASTER_VOLUME
 	self._soundGroup.Archivable = false
 	self._soundGroup.Parent = SoundService
 	self._maid:GiveTask(self._soundGroup)
 
-	self._maid:GiveTask(Rx.timer(0, 1 / UPDATE_SOUNDSCAPE_HZ)
-		:Pipe({
-			Rx.switchMap(function()
-				return self:ObserveBestSoundscapeNameForPoint(FocalPointUtils.getFocalPoint())
-			end),
-		})
-		:Subscribe(function(soundscapeName: string)
-			self._currentSoundscapeName.Value = soundscapeName
-		end))
-
-	self._maid:GiveTask(self:ObserveCurrentSoundScriptBrio():Subscribe(function(brio)
+	self._maid:GiveTask(self:ObserveBestSoundScriptBrio():Subscribe(function(brio)
 		self:_handleSoundScriptBrio(brio)
 	end))
+
+	-- Set the reverb!
+	self._maid:GiveTask(Blend.mount(SoundService, {
+		AmbientReverb = self._reverbStack:Observe(),
+	}))
 end
 
 --[=[
@@ -82,9 +79,9 @@ end
 
 	@private
 	@param point Vector3
-	@return string
+	@return SoundscapeTrigger
 ]=]
-function SoundscapeServiceClient:ObserveBestSoundscapeNameForPoint(point: Vector3)
+function SoundscapeServiceClient:GetBestSoundscapeTriggerForPoint(point: Vector3)
 	assert(typeof(point) == "Vector3", "Bad point")
 
 	-- Get all colliding soundscapes, then sort in volume ascending.
@@ -105,22 +102,8 @@ function SoundscapeServiceClient:ObserveBestSoundscapeNameForPoint(point: Vector
 		return a:GetVolume() < b:GetVolume()
 	end)
 
-	-- Observe the name associated with our chosen trigger, or fallback to the default.
-	return if soundscapes[1] then soundscapes[1]:ObserveName() else Rx.of(DEFAULT_SOUNDSCAPE_NAME)
-end
-
---[=[
-	Observe the name of the currently chosen soundscape.
-	This is the same used internally for playing sounds.
-	Updates periodically.
-
-	@private
-	@return Observable<Brio<string>>
-]=]
-function SoundscapeServiceClient:ObserveCurrentSoundscapeNameBrio()
-	return RxValueBaseUtils.observeValue(self._currentSoundscapeName):Pipe({
-		RxBrioUtils.switchToBrio,
-	})
+	-- Observe the name associated with our chosen trigger.
+	return soundscapes[1]
 end
 
 --[=[
@@ -129,8 +112,19 @@ end
 	@private
 	@return Observable<Brio<SoundScript>>
 ]=]
-function SoundscapeServiceClient:ObserveCurrentSoundScriptBrio()
-	return self:ObserveCurrentSoundscapeNameBrio():Pipe({
+function SoundscapeServiceClient:ObserveBestSoundScriptBrio()
+	return Rx.timer(0, 1 / UPDATE_SOUNDSCAPE_HZ):Pipe({
+		Rx.map(function()
+			return self:GetBestSoundscapeTriggerForPoint(FocalPointUtils.getFocalPoint())
+		end),
+		Rx.switchMap(function(trigger)
+			return if trigger then trigger:ObserveName() else Rx.of(nil)
+		end),
+		Rx.distinct(),
+		RxBrioUtils.switchToBrio,
+		RxBrioUtils.where(function(soundscapeName: string?)
+			return soundscapeName ~= nil
+		end),
 		RxBrioUtils.switchMapBrio(function(soundscapeName: string)
 			return self._registry:ObserveSoundScriptBrio(soundscapeName)
 		end),
@@ -147,7 +141,9 @@ function SoundscapeServiceClient:_handleSoundScriptBrio(brio)
 	local maid = brio:ToMaid()
 	local soundScript = brio:GetValue()
 
-	SoundService.AmbientReverb = soundScript.reverb or Enum.ReverbType.NoReverb
+	if soundScript.reverb then
+		maid:GiveTask(self._reverbStack:PushState(soundScript.reverb))
+	end
 
 	for i, entry in soundScript.layers or {} do
 		local sound = Instance.new("Sound")

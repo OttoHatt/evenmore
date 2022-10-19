@@ -5,7 +5,8 @@
 	This modules defines the format of SoundScripts, and a few generic templates that you can use in your own games.
 	SoundScripts in this module are automatically loaded; simply put the name of one (i.e. `city`) in a tagged trigger to use it.
 
-	If you create a soundscape with this system, consider submitting a PR! This module is most valuable as a portable library of soundscapes.
+	If you create a SoundScript with this system, please consider submitting a PR!
+	This module is most valuable as a library of soundscapes that can be used in a wide variety of games.
 
 	Format inspired by the [Source Engine soundscape system](https://developer.valvesoftware.com/wiki/Soundscape).
 ]=]
@@ -27,14 +28,6 @@
 ]=]
 
 local SoundScriptConstants = {}
-
---[=[
-	No sounds. No reverb.
-	@prop default SoundScript
-	@readonly
-	@within SoundScriptConstants
-]=]
-SoundScriptConstants.default = table.freeze({ reverb = Enum.ReverbType.NoReverb })
 
 --[=[
 	Traffic, cars honking, train passing, birds. Echoey reverb like you're between buildings.

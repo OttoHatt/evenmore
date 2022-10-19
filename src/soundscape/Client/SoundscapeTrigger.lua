@@ -5,7 +5,7 @@
 	Represents a soundscape trigger, constructed as a bounding box around the `SoundscapeTrigger` tagged adornee.
 	It's reccomended that you also apply Nevermore's `Hide` tag so that triggers are visible in-editor but not in-game.
 
-	The name of the soundscape to play is defined in the `Soundscape` attribute. Soundscapes are named and provided with [SoundScriptRegistryServiceClient]. Default soundscapes are defined in [SoundScriptConstants].
+	The name of the soundscape to play is defined in the `Soundscape` attribute. Soundscapes are named and provided with [SoundScriptRegistryServiceClient]. Include SoundScripts are defined in [SoundScriptConstants].
 
 	Note that your trigger can be a [Model] or [BasePart].
 	As intersections are found via vector maths (not with a .Touched event for example), you should disable `CanCollide`, `CanQuery`, and `CanTouch` wherever possible on [BasePart] triggers.
