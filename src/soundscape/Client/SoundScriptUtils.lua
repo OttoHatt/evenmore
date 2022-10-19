@@ -1,11 +1,11 @@
 --[=[
-	@class SoundscapeUtils
+	@class SoundScriptUtils
 	@client
 
 	Utilities for working with soundscape script files.
 ]=]
 
-local SoundscapeUtils = {}
+local SoundScriptUtils = {}
 
 local random = Random.new()
 
@@ -16,7 +16,7 @@ local random = Random.new()
     @param default number? -- Fallback value
     @return number
 ]=]
-function SoundscapeUtils.ev(value: any, default: number?)
+function SoundScriptUtils.ev(value: any, default: number?)
 	assert(typeof(default) == "number" or typeof(default) == "nil", "Bad default")
 
 	if typeof(value) == "nil" then
@@ -31,4 +31,4 @@ function SoundscapeUtils.ev(value: any, default: number?)
 	end
 end
 
-return SoundscapeUtils
+return SoundScriptUtils
