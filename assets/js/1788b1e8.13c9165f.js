@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[40],{63891:e=>{e.exports=JSON.parse('{"sourceUrl":"https://github.com/ottohatt/evenmore/blob/master","baseUrl":"/evenmore/","classOrder":[{"section":"Storybar","classes":["ButtonBarElement","SliderBarElement","StoryBar","StoryBarPaneUtils","StoryBarUtils","SwitchBarElement"]}],"apiCategories":[]}')}}]);
