@@ -7,7 +7,7 @@
 <title data-rh="true">SoundscapeTrigger | Evenmore</title><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://OttoHatt.github.io/evenmore/api/SoundscapeTrigger"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="SoundscapeTrigger | Evenmore"><meta data-rh="true" name="description" content="Represents a soundscape trigger, constructed as a bounding box around the `SoundscapeTrigger` tagged adornee.
 It&#x27;s reccomended that you also apply Nevermore&#x27;s `Hide` tag so that triggers are visible in-editor but not in-game.
 
-The name of the soundscape to play is defined in the `Soundscape` attribute. Soundscapes are named and provided with [SoundScriptRegistryServiceClient]. Default soundscapes are defined in [SoundScriptConstants].
+The name of the soundscape to play is defined in the `Soundscape` attribute. Soundscapes are named and provided with [SoundScriptRegistryServiceClient]. Include SoundScripts are defined in [SoundScriptConstants].
 
 Note that your trigger can be a [Model] or [BasePart].
 As intersections are found via vector maths (not with a .Touched event for example), you should disable `CanCollide`, `CanQuery`, and `CanTouch` wherever possible on [BasePart] triggers.
@@ -15,14 +15,14 @@ As intersections are found via vector maths (not with a .Touched event for examp
 ![Image of two intersecting soundscape triggers](/evenmore/soundscape/triggers.png)"><meta data-rh="true" property="og:description" content="Represents a soundscape trigger, constructed as a bounding box around the `SoundscapeTrigger` tagged adornee.
 It&#x27;s reccomended that you also apply Nevermore&#x27;s `Hide` tag so that triggers are visible in-editor but not in-game.
 
-The name of the soundscape to play is defined in the `Soundscape` attribute. Soundscapes are named and provided with [SoundScriptRegistryServiceClient]. Default soundscapes are defined in [SoundScriptConstants].
+The name of the soundscape to play is defined in the `Soundscape` attribute. Soundscapes are named and provided with [SoundScriptRegistryServiceClient]. Include SoundScripts are defined in [SoundScriptConstants].
 
 Note that your trigger can be a [Model] or [BasePart].
 As intersections are found via vector maths (not with a .Touched event for example), you should disable `CanCollide`, `CanQuery`, and `CanTouch` wherever possible on [BasePart] triggers.
 
 ![Image of two intersecting soundscape triggers](/evenmore/soundscape/triggers.png)"><link data-rh="true" rel="icon" href="/evenmore/favicon.ico"><link data-rh="true" rel="canonical" href="https://OttoHatt.github.io/evenmore/api/SoundscapeTrigger"><link data-rh="true" rel="alternate" href="https://OttoHatt.github.io/evenmore/api/SoundscapeTrigger" hreflang="en"><link data-rh="true" rel="alternate" href="https://OttoHatt.github.io/evenmore/api/SoundscapeTrigger" hreflang="x-default"><link rel="stylesheet" href="/evenmore/assets/css/styles.ce453ceb.css">
-<link rel="preload" href="/evenmore/assets/js/runtime~main.94049867.js" as="script">
-<link rel="preload" href="/evenmore/assets/js/main.d5263617.js" as="script">
+<link rel="preload" href="/evenmore/assets/js/runtime~main.d493b4a8.js" as="script">
+<link rel="preload" href="/evenmore/assets/js/main.5e12d596.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -31,7 +31,7 @@ As intersections are found via vector maths (not with a .Touched event for examp
   Represents a soundscape trigger, constructed as a bounding box around the <code>SoundscapeTrigger</code> tagged adornee.
   It's reccomended that you also apply Nevermore's <code>Hide</code> tag so that triggers are visible in-editor but not in-game.
 </p>
-<p>The name of the soundscape to play is defined in the <code>Soundscape</code> attribute. Soundscapes are named and provided with <a href="/evenmore/api/SoundScriptRegistryServiceClient">SoundScriptRegistryServiceClient</a>. Default soundscapes are defined in <a href="/evenmore/api/SoundScriptConstants">SoundScriptConstants</a>.</p>
+<p>The name of the soundscape to play is defined in the <code>Soundscape</code> attribute. Soundscapes are named and provided with <a href="/evenmore/api/SoundScriptRegistryServiceClient">SoundScriptRegistryServiceClient</a>. Include SoundScripts are defined in <a href="/evenmore/api/SoundScriptConstants">SoundScriptConstants</a>.</p>
 <p>
   Note that your trigger can be a <a href="https://developer.roblox.com/en-us/api-reference/class/Model" target="_blank">Model</a> or <a href="https://developer.roblox.com/en-us/api-reference/class/BasePart" target="_blank">BasePart</a>.
   As intersections are found via vector maths (not with a .Touched event for example), you should disable <code>CanCollide</code>, <code>CanQuery</code>, and <code>CanTouch</code> wherever possible on <a href="https://developer.roblox.com/en-us/api-reference/class/BasePart" target="_blank">BasePart</a> triggers.
@@ -129,7 +129,7 @@ As intersections are found via vector maths (not with a .Touched event for examp
     &quot;properties&quot;: [],
     &quot;types&quot;: [],
     &quot;name&quot;: &quot;SoundscapeTrigger&quot;,
-    &quot;desc&quot;: &quot;Represents a soundscape trigger, constructed as a bounding box around the `SoundscapeTrigger` tagged adornee.\nIt&#x27;s reccomended that you also apply Nevermore&#x27;s `Hide` tag so that triggers are visible in-editor but not in-game.\n\nThe name of the soundscape to play is defined in the `Soundscape` attribute. Soundscapes are named and provided with [SoundScriptRegistryServiceClient]. Default soundscapes are defined in [SoundScriptConstants].\n\nNote that your trigger can be a [Model] or [BasePart].\nAs intersections are found via vector maths (not with a .Touched event for example), you should disable `CanCollide`, `CanQuery`, and `CanTouch` wherever possible on [BasePart] triggers.\n\n![Image of two intersecting soundscape triggers](/evenmore/soundscape/triggers.png)&quot;,
+    &quot;desc&quot;: &quot;Represents a soundscape trigger, constructed as a bounding box around the `SoundscapeTrigger` tagged adornee.\nIt&#x27;s reccomended that you also apply Nevermore&#x27;s `Hide` tag so that triggers are visible in-editor but not in-game.\n\nThe name of the soundscape to play is defined in the `Soundscape` attribute. Soundscapes are named and provided with [SoundScriptRegistryServiceClient]. Include SoundScripts are defined in [SoundScriptConstants].\n\nNote that your trigger can be a [Model] or [BasePart].\nAs intersections are found via vector maths (not with a .Touched event for example), you should disable `CanCollide`, `CanQuery`, and `CanTouch` wherever possible on [BasePart] triggers.\n\n![Image of two intersecting soundscape triggers](/evenmore/soundscape/triggers.png)&quot;,
     &quot;realm&quot;: [
         &quot;Client&quot;
     ],
@@ -138,7 +138,7 @@ As intersections are found via vector maths (not with a .Touched event for examp
         &quot;path&quot;: &quot;src/soundscape/Client/SoundscapeTrigger.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#CheckAABB" class="table-of-contents__link toc-highlight">:CheckAABB</a></li><li><a href="#GetVolume" class="table-of-contents__link toc-highlight">:GetVolume</a></li><li><a href="#ObserveName" class="table-of-contents__link toc-highlight">:ObserveName</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 OttoHatt. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/evenmore/assets/js/runtime~main.94049867.js"></script>
-<script src="/evenmore/assets/js/main.d5263617.js"></script>
+<script src="/evenmore/assets/js/runtime~main.d493b4a8.js"></script>
+<script src="/evenmore/assets/js/main.5e12d596.js"></script>
 </body>
 </html>

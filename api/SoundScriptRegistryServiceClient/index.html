@@ -11,8 +11,8 @@ You can also write to an existing key with a new table - and if that soundscape 
 
 Registration is designed to be very flexible. You can register a SoundScript at any time with [SoundScriptRegistryServiceClient:RegisterSoundScript].
 You can also write to an existing key with a new table - and if that soundscape is currently playing, playback will automatically restart with the new sounds."><link data-rh="true" rel="icon" href="/evenmore/favicon.ico"><link data-rh="true" rel="canonical" href="https://OttoHatt.github.io/evenmore/api/SoundScriptRegistryServiceClient"><link data-rh="true" rel="alternate" href="https://OttoHatt.github.io/evenmore/api/SoundScriptRegistryServiceClient" hreflang="en"><link data-rh="true" rel="alternate" href="https://OttoHatt.github.io/evenmore/api/SoundScriptRegistryServiceClient" hreflang="x-default"><link rel="stylesheet" href="/evenmore/assets/css/styles.ce453ceb.css">
-<link rel="preload" href="/evenmore/assets/js/runtime~main.94049867.js" as="script">
-<link rel="preload" href="/evenmore/assets/js/main.d5263617.js" as="script">
+<link rel="preload" href="/evenmore/assets/js/runtime~main.d493b4a8.js" as="script">
+<link rel="preload" href="/evenmore/assets/js/main.5e12d596.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -22,10 +22,15 @@ You can also write to an existing key with a new table - and if that soundscape 
   Registration is designed to be very flexible. You can register a SoundScript at any time with <a href="/evenmore/api/SoundScriptRegistryServiceClient#RegisterSoundScript">SoundScriptRegistryServiceClient:RegisterSoundScript</a>.
   You can also write to an existing key with a new table - and if that soundscape is currently playing, playback will automatically restart with the new sounds.
 </p>
-</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a class="hash-link" href="#functions" title="Direct link to heading">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="RegisterSoundScript"><code style="text-decoration:none">RegisterSoundScript</code><a class="hash-link" href="#RegisterSoundScript" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/ottohatt/evenmore/blob/master/src/soundscape/Client/SoundScriptRegistryServiceClient.lua#L45"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>SoundScriptRegistryServiceClient<!-- -->:</code><code class="green_DgR4">RegisterSoundScript</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>soundScript<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/evenmore/api/SoundScriptConstants#SoundScript">SoundScript</a></code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a class="hash-link" href="#functions" title="Direct link to heading">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="RegisterSoundScript"><code style="text-decoration:none">RegisterSoundScript</code><a class="hash-link" href="#RegisterSoundScript" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/ottohatt/evenmore/blob/master/src/soundscape/Client/SoundScriptRegistryServiceClient.lua#L44"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>SoundScriptRegistryServiceClient<!-- -->:</code><code class="green_DgR4">RegisterSoundScript</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Arbitrary, just used as a way to identify this <a href="/evenmore/api/SoundScriptConstants#SoundScript">SoundScript</a>.</p>
+</span></span></div><div><code>soundScript<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/evenmore/api/SoundScriptConstants#SoundScript">SoundScript</a></code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Registers a <a href="/evenmore/api/SoundScriptConstants#SoundScript">SoundScript</a> to be used by <a href="/evenmore/api/SoundscapeTrigger">SoundscapeTrigger</a>s.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ObserveSoundScriptBrio"><code style="text-decoration:none">ObserveSoundScriptBrio</code><a class="hash-link" href="#ObserveSoundScriptBrio" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/ottohatt/evenmore/blob/master/src/soundscape/Client/SoundScriptRegistryServiceClient.lua#L61"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>SoundScriptRegistryServiceClient<!-- -->:</code><code class="green_DgR4">ObserveSoundScriptBrio</code><code>(</code><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">Observable</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">Brio</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/evenmore/api/SoundScriptConstants#SoundScript">SoundScript?</a></code><code class="op_lSLc">&gt;</code><code class="op_lSLc">&gt;</code></div><div>
-<p>Observes the contents of a <a href="/evenmore/api/SoundScriptConstants#SoundScript">SoundScript</a> inside the registry given its name.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ObserveSoundScriptBrio"><code style="text-decoration:none">ObserveSoundScriptBrio</code><a class="hash-link" href="#ObserveSoundScriptBrio" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/ottohatt/evenmore/blob/master/src/soundscape/Client/SoundScriptRegistryServiceClient.lua#L61"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>SoundScriptRegistryServiceClient<!-- -->:</code><code class="green_DgR4">ObserveSoundScriptBrio</code><code>(</code><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">Observable</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">Brio</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/evenmore/api/SoundScriptConstants#SoundScript">SoundScript</a></code><code class="op_lSLc">&gt;</code><code class="op_lSLc">&gt;</code></div><div>
+<p>
+  Observe the contents of a <a href="/evenmore/api/SoundScriptConstants#SoundScript">SoundScript</a> given its name inside the registry.
+  If not found, the Observable won't complete.
+</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
         {
@@ -34,7 +39,7 @@ You can also write to an existing key with a new table - and if that soundscape 
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;name&quot;,
-                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;desc&quot;: &quot;Arbitrary, just used as a way to identify this [SoundScript].&quot;,
                     &quot;lua_type&quot;: &quot;string&quot;
                 },
                 {
@@ -46,13 +51,13 @@ You can also write to an existing key with a new table - and if that soundscape 
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 45,
+                &quot;line&quot;: 44,
                 &quot;path&quot;: &quot;src/soundscape/Client/SoundScriptRegistryServiceClient.lua&quot;
             }
         },
         {
             &quot;name&quot;: &quot;ObserveSoundScriptBrio&quot;,
-            &quot;desc&quot;: &quot;Observes the contents of a [SoundScript] inside the registry given its name.&quot;,
+            &quot;desc&quot;: &quot;Observe the contents of a [SoundScript] given its name inside the registry.\nIf not found, the Observable won&#x27;t complete.&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;name&quot;,
@@ -63,7 +68,7 @@ You can also write to an existing key with a new table - and if that soundscape 
             &quot;returns&quot;: [
                 {
                     &quot;desc&quot;: &quot;&quot;,
-                    &quot;lua_type&quot;: &quot;Observable&lt;Brio&lt;SoundScript?&gt;&gt;&quot;
+                    &quot;lua_type&quot;: &quot;Observable&lt;Brio&lt;SoundScript&gt;&gt;&quot;
                 }
             ],
             &quot;function_type&quot;: &quot;method&quot;,
@@ -85,7 +90,7 @@ You can also write to an existing key with a new table - and if that soundscape 
         &quot;path&quot;: &quot;src/soundscape/Client/SoundScriptRegistryServiceClient.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#ObserveSoundScriptBrio" class="table-of-contents__link toc-highlight">:ObserveSoundScriptBrio</a></li><li><a href="#RegisterSoundScript" class="table-of-contents__link toc-highlight">:RegisterSoundScript</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 OttoHatt. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/evenmore/assets/js/runtime~main.94049867.js"></script>
-<script src="/evenmore/assets/js/main.d5263617.js"></script>
+<script src="/evenmore/assets/js/runtime~main.d493b4a8.js"></script>
+<script src="/evenmore/assets/js/main.5e12d596.js"></script>
 </body>
 </html>
