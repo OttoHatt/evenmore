@@ -16,7 +16,7 @@ local Maid = require("Maid")
 local Rx = require("Rx")
 local RxBrioUtils = require("RxBrioUtils")
 local SoundscapeBindersClient = require("SoundscapeBindersClient")
-local SoundscapeUtils = require("SoundscapeUtils")
+local SoundScriptUtils = require("SoundScriptUtils")
 local SoundScriptRegistryServiceClient = require("SoundScriptRegistryServiceClient")
 local FocalPointUtils = require("FocalPointUtils")
 local StateStack = require("StateStack")
@@ -156,9 +156,9 @@ function SoundscapeServiceClient:_handleSoundScriptBrio(brio)
 		maid:GiveTask(sound)
 
 		local function playSound()
-			sound.PlaybackSpeed = SoundscapeUtils.ev(entry.pitch, 1)
-			sound.Volume = SoundscapeUtils.ev(entry.volume, 1)
-			sound.TimePosition = SoundscapeUtils.ev(entry.seek, 0)
+			sound.PlaybackSpeed = SoundScriptUtils.ev(entry.pitch, 1)
+			sound.Volume = SoundScriptUtils.ev(entry.volume, 1)
+			sound.TimePosition = SoundScriptUtils.ev(entry.seek, 0)
 			sound:Play()
 		end
 
@@ -166,7 +166,7 @@ function SoundscapeServiceClient:_handleSoundScriptBrio(brio)
 			-- Play at re-occuring intervals according to the script.
 			-- We don't want to re-trigger looping sounds! They'll all play immediately.
 			maid:GiveTask(task.defer(function()
-				task.wait(SoundscapeUtils.ev(entry.delay))
+				task.wait(SoundScriptUtils.ev(entry.delay))
 				playSound()
 			end))
 		else
