@@ -32,7 +32,7 @@ SoundscapeTrigger.__index = SoundscapeTrigger
 	@param bound Instance
 	@return SoundscapeTrigger
 ]=]
-function SoundscapeTrigger.new(bound: any)
+function SoundscapeTrigger.new(bound: Instance)
 	local self = setmetatable(BaseObject.new(bound), SoundscapeTrigger)
 
 	local cframe, size = AdorneeUtils.getBoundingBox(bound)
@@ -41,6 +41,10 @@ function SoundscapeTrigger.new(bound: any)
 	self._aabb = CompiledBoundingBoxUtils.compileBBox(cframe, size)
 	self._name = self._obj:GetAttribute(ATTRIBUTE_NAME)
 	self._volume = size.X * size.Y * size.Z
+
+	if typeof(bound:GetAttribute(ATTRIBUTE_NAME)) ~= "string" then
+		warn(("[SoundscapeTrigger] Trigger '%s' has no .Soundscape string attribute!"):format(bound:GetFullName()))
+	end
 
 	return self
 end
