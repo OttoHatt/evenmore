@@ -9,6 +9,12 @@ A collection of yet *even more* [Nevermore](https://github.com/Quenty/NevermoreE
 
 The packages in this monorepo are more than just utilities, each provides a complete-ish feature. They're generic enough to be used in (almost) any game! Hopefully this will make your game development easier and funner.
 
+## Packages
+| Name | Description |
+| --- | --- |
+| Soundscape | Drop-in soundscapes with a library of existing sounds. Automatically switches between soundscapes when inside tagged `BasePart`/`Model` triggers. Included format is simple with examples -  you can easily design your own soundscapes! |
+| Storybar | Provides labelled sliders and buttons; slot them together to create specialised tests for your Hoareckat stories. Integrates with existing Nevermore classes like `BasicPane`. |
+
 ## Usage
 Modules above the top level of a package are considered private. Requiring them is not intended; they're undocumented, and will receive breaking changes.
 
