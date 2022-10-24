@@ -22,6 +22,7 @@ local Blend = require("Blend")
 local RxValueBaseUtils = require("RxValueBaseUtils")
 local TextServiceUtils = require("TextServiceUtils")
 local RxInstanceUtils = require("RxInstanceUtils")
+local BaseBarElementUtils = require("BaseBarElementUtils")
 
 local SwitchBarElement = setmetatable({}, BaseBarElement)
 SwitchBarElement.ClassName = "SwitchBarElement"
@@ -186,7 +187,7 @@ function SwitchBarElement:_render(gui: Instance)
 							Blend.New("Frame")({
 								AnchorPoint = Vector2.new(0.5, 0.5),
 								Size = UDim2.new(0, 12, 0, 12),
-								BackgroundColor3 = self._colorTheming:ObserveColor("Red"),
+								BackgroundColor3 = BaseBarElementUtils.observePrimaryColor(self._colorTheming, self._acceptingInput),
 								Position = Blend.Spring(
 									Blend.Computed(self._value, function(value)
 										return UDim2.new(value, 0, 0.5, 0)

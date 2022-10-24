@@ -15,6 +15,7 @@ local BaseBarElement = require("BaseBarElement")
 local Blend = require("Blend")
 local RxValueBaseUtils = require("RxValueBaseUtils")
 local TextServiceUtils = require("TextServiceUtils")
+local BaseBarElementUtils = require("BaseBarElementUtils")
 
 local SwitchBarElement = setmetatable({}, BaseBarElement)
 SwitchBarElement.ClassName = "SwitchBarElement"
@@ -116,15 +117,7 @@ function SwitchBarElement:_render(gui: Instance)
 					self:RenderPadding(),
 					Blend.New("Frame")({
 						AnchorPoint = Vector2.one / 2,
-						BackgroundColor3 = self._colorTheming:ObserveColor(
-							"Red",
-							Blend.Spring(
-								Blend.Computed(self._value, function(value)
-									return if value then 40 else 20
-								end),
-								100
-							)
-						),
+						BackgroundColor3 = BaseBarElementUtils.observePrimaryColor(self._colorTheming, self._value),
 						[Blend.Instance] = self._blip,
 						[Blend.Children] = {
 							Blend.New("UICorner")({
