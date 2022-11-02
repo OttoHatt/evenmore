@@ -11,7 +11,7 @@
 	Format inspired by the [Source Engine soundscape system](https://developer.valvesoftware.com/wiki/Soundscape).
 ]=]
 
---- @type SoundScript { reverb: Enum.ReverbType, layers: {SoundEntry} }
+--- @type SoundScript { reverb: Enum.ReverbType, layers: {SoundEntry}, includes: {SoundScript}? }
 --- @within SoundScriptConstants
 
 --- @type SoundEntry { id: string, loop: boolean?, volume: SoundValue, pitch: SoundValue, delay: SoundValue }
@@ -94,18 +94,107 @@ SoundScriptConstants.city = table.freeze({
 })
 
 --[=[
-	Birds, wind, tree movement. Subtle, dead reverb.
-	@prop park SoundScript
+	Random bump noises, echoey reverb. Probably best used as an include for other soundscapes.
+	@prop bumps SoundScript
 	@readonly
 	@within SoundScriptConstants
 ]=]
-SoundScriptConstants.park = table.freeze({
-	reverb = Enum.ReverbType.Forest,
+SoundScriptConstants.bumps = table.freeze({
+	reverb = Enum.ReverbType.Cave,
+	includes = {},
 	layers = {
-		-- Forest ambience 2 (SFX)
-		{ id = "rbxassetid://9112781689", loop = true, volume = 1.4 },
-		-- Neighborhood Birds 2 (SFX)
-		{ id = "rbxassetid://9112835068", loop = true, volume = 1.1 },
+		-- Apartment Bumps 1 (SFX)
+		{
+			id = "rbxassetid://9113135451",
+			loop = false,
+			volume = { 0.1, 0.2 },
+			pitch = { 0.97, 1.03 },
+			delay = { 0, 60 * 2 },
+		},
+		-- Apartment Bumps 3 (SFX)
+		{
+			id = "rbxassetid://9113136153",
+			loop = false,
+			volume = { 0.1, 0.2 },
+			pitch = { 0.97, 1.03 },
+			delay = { 0, 60 * 2 },
+		},
+		-- Apartment Bumps 4 (SFX)
+		{
+			id = "rbxassetid://9113135034",
+			loop = false,
+			volume = { 0.1, 0.2 },
+			pitch = { 0.97, 1.03 },
+			delay = { 0, 60 * 2 },
+		},
+	},
+})
+
+--[=[
+	Air conditioning, light machine noise, electric light hums. Occasional bumping noises from importing [SoundScriptConstants.bumps].
+	@prop office SoundScript
+	@readonly
+	@within SoundScriptConstants
+]=]
+SoundScriptConstants.office = table.freeze({
+	reverb = Enum.ReverbType.CarpettedHallway,
+	includes = {
+		SoundScriptConstants.bumps,
+	},
+	layers = {
+		-- Bar Sign Buzz 5 (SFX)
+		{
+			id = "rbxassetid://9113285810",
+			loop = false,
+			volume = { 1.2, 1.5 },
+			pitch = { 0.97, 1.03 },
+			delay = { 1, 6 },
+		},
+		-- Amp Hum Open Input 7 (SFX)
+		{
+			id = "rbxassetid://9113114288",
+			loop = false,
+			volume = { 0.05, 0.07 },
+			pitch = { 0.97, 1.03 },
+			delay = { 13, 20 },
+		},
+		-- Hum
+		{
+			id = "rbxassetid://5523254861",
+			loop = false,
+			volume = { 0.08, 0.15 },
+			pitch = { 0.97, 1.03 },
+			delay = { 13, 20 },
+		},
+		-- Air Conditioner Sound offical
+		{
+			id = "rbxassetid://6014202040",
+			loop = true,
+			volume = 0.55,
+			pitch = 1,
+		},
+		-- Machine Room 4 (SFX)
+		{
+			id = "rbxassetid://9112825229",
+			loop = true,
+			pitch = 1.55,
+			volume = 2,
+		},
+		-- Supermarket Activity Moving Items Along Cabi (SFX)
+		{
+			id = "rbxassetid://9126010508",
+			loop = false,
+			volume = { 0.1, 0.15 },
+			pitch = { 0.97, 1.03 },
+			delay = { 13, 45 },
+		},
+		-- Dream Room Analog Synth Glisses Eerie Harmon (SFX)
+		-- {
+		-- 	id = "rbxassetid://9125499063",
+		-- 	loop = true,
+		-- 	volume = .05,
+		-- 	pitch = 2,
+		-- },
 	},
 })
 
