@@ -166,8 +166,10 @@ function SoundscapeServiceClient:_handleSoundScriptBrio(brio)
 			-- Play at re-occuring intervals according to the script.
 			-- We don't want to re-trigger looping sounds! They'll all play immediately.
 			maid:GiveTask(task.defer(function()
-				task.wait(SoundScriptUtils.ev(entry.delay))
-				playSound()
+				while true do
+					task.wait(SoundScriptUtils.ev(entry.delay))
+					playSound()
+				end
 			end))
 		else
 			-- Play immediately!
