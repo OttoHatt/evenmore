@@ -15,7 +15,7 @@
 
 local require = require(script.Parent.loader).load(script)
 
-local ATTRIBUTE_NAME = "Soundscape"
+local ATTRIBUTE_SOUNDSCAPE_NAME = "Soundscape"
 
 -- For more info: https://medium.com/@fraactality/single-matrix-point-obb-test-66724b9e1f84
 local CompiledBoundingBoxUtils = require("CompiledBoundingBoxUtils")
@@ -39,12 +39,13 @@ function SoundscapeTrigger.new(bound: Instance)
 	assert(cframe and size, "[SoundscapeTrigger] Invalid adornee! Can't derive center or size.")
 
 	self._aabb = CompiledBoundingBoxUtils.compileBBox(cframe, size)
-	self._name = self._obj:GetAttribute(ATTRIBUTE_NAME)
+	self._name = self._obj:GetAttribute(ATTRIBUTE_SOUNDSCAPE_NAME)
 	self._volume = size.X * size.Y * size.Z
 
-	if typeof(bound:GetAttribute(ATTRIBUTE_NAME)) ~= "string" then
-		warn(("[SoundscapeTrigger] Trigger '%s' has no .Soundscape string attribute!"):format(bound:GetFullName()))
-	end
+	assert(
+		typeof(self._name) == "string",
+		("[SoundscapeTrigger] Trigger '%s' has no .Soundscape string attribute!"):format(bound:GetFullName())
+	)
 
 	return self
 end
@@ -65,7 +66,7 @@ end
     @return Observable<string>
 ]=]
 function SoundscapeTrigger:ObserveName()
-	return RxAttributeUtils.observeAttribute(self._obj, ATTRIBUTE_NAME)
+	return RxAttributeUtils.observeAttribute(self._obj, ATTRIBUTE_SOUNDSCAPE_NAME)
 end
 
 --[=[
