@@ -57,6 +57,7 @@ end
     @return boolean
 ]=]
 function SoundscapeTrigger:CheckAABB(point: Vector3)
+	assert(typeof(point) == "Vector3", "Bad point")
 	return CompiledBoundingBoxUtils.testPointBBox(point, self._aabb)
 end
 

@@ -46,7 +46,7 @@ function SoundScriptRegistryServiceClient:RegisterSoundScript(name: string, soun
 	-- See [SoundScriptConstants] for more details on the format.
 	assert(typeof(name) == "string", "Bad SoundScript name")
 	assert(typeof(soundScript) == "table", "Bad SoundScript table")
-	assert(table.isfrozen(soundScript), "SoundScript tables must be frozen as an acknowledgement that they aren't dynamic")
+	assert(table.isfrozen(soundScript), "Bad SoundScript; must be frozen as an acknowledgement it isn't dynamic")
 
 	self._soundScriptMap:Set(name, soundScript)
 end
@@ -59,6 +59,8 @@ end
 	@return Observable<Brio<SoundScript>>
 ]=]
 function SoundScriptRegistryServiceClient:ObserveSoundScriptBrio(name: string)
+	assert(typeof(name) == "string", "Bad SoundScript name")
+
 	return self._soundScriptMap:ObserveValueForKey(name):Pipe({
 		RxBrioUtils.switchToBrio,
 		RxBrioUtils.where(function(value)

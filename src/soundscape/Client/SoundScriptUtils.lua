@@ -7,7 +7,7 @@
 
 local SoundScriptUtils = {}
 
-local random = Random.new()
+local RANDOM = Random.new()
 
 --[=[
     Evaluates a value defined in a soundscript. Supports defualt values, defined values, and values picked randomly in a range.
@@ -16,7 +16,7 @@ local random = Random.new()
     @param default number? -- Fallback value
     @return number
 ]=]
-function SoundScriptUtils.ev(value: any, default: number?)
+function SoundScriptUtils.ev(value: nil | number | {number}, default: number?)
 	assert(typeof(default) == "number" or typeof(default) == "nil", "Bad default")
 
 	if typeof(value) == "nil" then
@@ -25,9 +25,9 @@ function SoundScriptUtils.ev(value: any, default: number?)
 	elseif typeof(value) == "number" then
 		return value
 	elseif typeof(value) == "table" and #value == 2 then
-		return random:NextNumber(table.unpack(value))
+		return RANDOM:NextNumber(table.unpack(value))
 	else
-		assert(false, "[SoundscapeServiceClient] Invalid soundscape property!")
+		error("[SoundscapeServiceClient] Invalid soundscape property!")
 	end
 end
 
