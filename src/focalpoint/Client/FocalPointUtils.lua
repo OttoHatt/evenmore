@@ -37,11 +37,7 @@ end
 	@return Observable<Vector3>
 ]=]
 local function observeInstancePosition(instance: Instance)
-	return RxInstanceUtils.observeProperty(instance, "CFrame"):Pipe({
-		Rx.map(function(cf: CFrame)
-			return cf.Position
-		end)
-	})
+	return RxInstanceUtils.observeProperty(instance, "Position")
 end
 
 --[=[
