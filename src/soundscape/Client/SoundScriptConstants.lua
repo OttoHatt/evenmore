@@ -11,11 +11,15 @@
 	Format inspired by the [Source Engine soundscape system](https://developer.valvesoftware.com/wiki/Soundscape).
 ]=]
 
---- @type SoundScript { reverb: Enum.ReverbType, layers: {SoundEntry}, includes: {SoundScript}? }
---- @within SoundScriptConstants
+--[=[
+	@type SoundScript { reverb: Enum.ReverbType, layers: {SoundEntry}, includes: {SoundScript}? }
+	@within SoundScriptConstants
+]=]
 
---- @type SoundEntry { id: string, loop: boolean?, volume: SoundValue, pitch: SoundValue, delay: SoundValue }
---- @within SoundScriptConstants
+--[=[
+	@type SoundEntry { id: string, loop: boolean?, volume: SoundValue, pitch: SoundValue, delay: SoundValue }
+	@within SoundScriptConstants
+]=]
 
 --[=[
 	@type SoundValue { number } | number | nil
