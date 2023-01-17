@@ -109,6 +109,15 @@ function EffectValue:Observe()
 end
 
 --[=[
+	Gets the current compounded value.
+
+	@return number
+]=]
+function EffectValue:GetValue()
+	return self._value.Value
+end
+
+--[=[
 	Set the base value of the effect.
 	Note that this will automatically update the final value, and notify any observers.
 
