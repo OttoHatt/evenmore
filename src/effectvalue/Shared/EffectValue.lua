@@ -4,7 +4,7 @@
 	Given a base number value, apply compounding multipliers on top.
 	Useful for levelling-up, simulators, etc.
 
-	For more advanced functionlaity, see Quenty's [RogueProperty].
+	For more advanced functionality, see Quenty's [RogueProperty].
 ]=]
 
 local require = require(script.Parent.loader).load(script)
@@ -81,6 +81,24 @@ function EffectValue:_observeBaseValue()
 end
 
 --[=[
+	Push a multiplier (i.e. 'effect') onto the base value.
+
+	All multipliers are multiplied together before being applied. This means they compound.
+	```
+	i.e. with multipliers (1, 1, 1) => baseValue * 1.
+	i.e. with multipliers (1, 1.5, 0.3) => baseValue * 0.15.
+	```
+
+	@param multiplier number
+	@return callback -- Call to remove
+]=]
+function EffectValue:PushMultiplier(multiplier: number)
+	assert(typeof(multiplier) == "number", "Bad multiplier")
+
+	return self._multiplierList:Add(multiplier)
+end
+
+--[=[
 	Observe the final value, after all multipliers have been compounded.
 
 	@return Observable<number>
@@ -99,24 +117,6 @@ function EffectValue:SetBaseValue(baseValue: number)
 	assert(typeof(baseValue) == "number", "Bad baseValue")
 
 	self._baseValue.Value = baseValue
-end
-
---[=[
-	Push a multiplier (i.e. 'effect') onto the base value.
-
-	All multipliers are multiplied together before being applied. This means they compound.
-	```
-	i.e. with multipliers (1, 1, 1) => baseValue * 1.
-	i.e. with multipliers (1, 1.5, 0.3) => baseValue * 0.15.
-	```
-
-	@param multiplier number
-	@return callback -- Call to remove
-]=]
-function EffectValue:PushMultiplier(multiplier: number)
-	assert(typeof(multiplier) == "number", "Bad multiplier")
-
-	return self._multiplierList:Add(multiplier)
 end
 
 return EffectValue
