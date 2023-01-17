@@ -73,6 +73,7 @@ function EffectValue:_observeMultiplier()
 			return value
 		end),
 		RxBrioUtils.emitOnDeath(1),
+		Rx.defaultsTo(1),
 	})
 end
 
