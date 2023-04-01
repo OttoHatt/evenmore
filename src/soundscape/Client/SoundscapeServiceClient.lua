@@ -128,7 +128,7 @@ end
 	@return Observable<Brio<SoundScript>>
 ]=]
 function SoundscapeServiceClient:ObserveBestSoundScriptBrio()
-	return Rx.timer(0, 1 / UPDATE_SOUNDSCAPE_HZ):Pipe({
+	return Rx.interval(1 / UPDATE_SOUNDSCAPE_HZ):Pipe({
 		Rx.map(function()
 			return self:GetBestSoundscapeTriggerForPoint(FocalPointUtils.getFocalPoint())
 		end),
@@ -136,7 +136,7 @@ function SoundscapeServiceClient:ObserveBestSoundScriptBrio()
 			return if trigger then trigger:ObserveName() else Rx.of(nil)
 		end),
 		Rx.distinct(),
-		RxBrioUtils.switchToBrio,
+		RxBrioUtils.switchToBrio(),
 		RxBrioUtils.where(function(soundscapeName: string?)
 			return soundscapeName ~= nil
 		end),

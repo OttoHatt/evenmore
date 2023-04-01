@@ -62,7 +62,7 @@ function SoundScriptRegistryServiceClient:ObserveSoundScriptBrio(name: string)
 	assert(typeof(name) == "string", "Bad SoundScript name")
 
 	return self._soundScriptMap:ObserveValueForKey(name):Pipe({
-		RxBrioUtils.switchToBrio,
+		RxBrioUtils.switchToBrio(),
 		RxBrioUtils.where(function(value)
 			return value ~= nil
 		end),
