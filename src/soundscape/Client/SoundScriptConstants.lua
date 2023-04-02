@@ -218,4 +218,22 @@ SoundScriptConstants.forest = table.freeze({
 	},
 })
 
+--[=[
+	Subtle wind, birds, water noise. Dampened reverb.
+	@readonly
+	@prop lake SoundScript
+	@within SoundScriptConstants
+]=]
+SoundScriptConstants.lake = table.freeze({
+	reverb = Enum.ReverbType.Forest,
+	layers = {
+		-- Leaves Rustle Wind Blowing Through Trees 1 (SFX)
+		{ id = "rbxassetid://9116258071", loop = true, volume = 0.4 },
+		-- Neighborhood Birds 2 (SFX)
+		{ id = "rbxassetid://9112835068", loop = true, volume = 0.5 },
+		-- Calm_Ocean_Loop
+		{ id = "rbxassetid://3524741725", loop = true, volume = 0.05 },
+	},
+})
+
 return table.freeze(SoundScriptConstants)
