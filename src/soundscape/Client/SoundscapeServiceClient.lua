@@ -130,7 +130,13 @@ end
 function SoundscapeServiceClient:ObserveBestSoundScriptBrio()
 	return Rx.interval(1 / UPDATE_SOUNDSCAPE_HZ):Pipe({
 		Rx.map(function()
-			return self:GetBestSoundscapeTriggerForPoint(FocalPointUtils.getFocalPoint())
+			-- TODO: This returning nil is so incredibly stupid.
+			local focalPoint: Vector3? = FocalPointUtils.getFocalPoint()
+			if focalPoint then
+				return self:GetBestSoundscapeTriggerForPoint(focalPoint)
+			else
+				return nil
+			end
 		end),
 		Rx.switchMap(function(trigger)
 			return if trigger then trigger:ObserveName() else Rx.of(nil)
