@@ -1,0 +1,25 @@
+{
+    "name": "Evenmore Demo",
+	"globIgnorePaths": [ "**/.package-lock.json" ],
+    "tree": {
+        "$className": "DataModel",
+        "ServerScriptService": {
+            "$className": "ServerScriptService",
+            "$path": "demo/Server",
+            "demo": {
+                "$className": "Folder",
+                "$path": "node_modules",
+                "@evenmore": {
+                    "$path": "."
+                }
+            }
+        },
+        "StarterPlayer": {
+            "$className": "StarterPlayer",
+            "StarterPlayerScripts": {
+                "$className": "StarterPlayerScripts",
+                "$path": "demo/Client"
+            }
+        }
+    }
+}

@@ -1,0 +1,4 @@
+node_modules
+
+# This is for authoring, consumers don't need it!
+.vscode

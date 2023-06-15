@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@quenty/attributeutils": "^8.15.0",
+    "@quenty/basicpane": "^7.14.0",
+    "@quenty/blend": "^6.19.0",
+    "@quenty/buttonhighlightmodel": "^8.8.0",
+    "@quenty/colorpalette": "^4.24.0",
+    "@quenty/lipsum": "^8.23.0",
+    "@quenty/loader": "^6.2.1",
+    "@quenty/maid": "^2.5.0",
+    "@quenty/observablecollection": "^5.17.0",
+    "@quenty/rx": "^7.11.0",
+    "@quenty/servicebag": "^6.7.0",
+    "@quenty/signal": "^2.4.0",
+    "@quenty/statestack": "^8.16.0",
+    "@quenty/string": "^3.1.0",
+    "@quenty/textserviceutils": "^7.21.0"
+  }
+}
