@@ -28,7 +28,7 @@ local function makeFrondDemo(...)
 			node:SetFlowDirection(FrondConstants.DIRECTION_ROW)
 		end
 		maid:GiveTask(elemPaddingSlider:Observe():Subscribe(function(value)
-			node:SetElementPadding(value * 64)
+			node:SetGap(value * 64)
 		end))
 		maid:GiveTask(boxPaddingSlider:Observe():Subscribe(function(value)
 			node:SetPaddingXY(value * 64)

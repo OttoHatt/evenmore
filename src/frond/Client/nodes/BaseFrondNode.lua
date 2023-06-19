@@ -51,15 +51,6 @@ function BaseFrondNode.new()
 	return self
 end
 
-function BaseFrondNode:ObserveUserDataBrio()
-	return self._userDataValue:Observe():Pipe({
-		RxBrioUtils.switchToBrio(),
-		RxBrioUtils.where(function(value)
-			return value ~= nil
-		end),
-	})
-end
-
 function BaseFrondNode:ObserveSizeUDim2()
 	return Observable.new(function(sub)
 		local lX, lY

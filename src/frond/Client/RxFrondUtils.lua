@@ -10,12 +10,12 @@ local RxInstanceUtils = require("RxInstanceUtils")
 local RxBrioUtils = require("RxBrioUtils")
 local Rx = require("Rx")
 local Observable = require("Observable")
-local String = require("String")
 local FlexFrondNode = require("FlexFrondNode")
 local Blend = require("Blend")
 local Maid = require("Maid")
 local FrondAttrs = require("FrondAttrs")
 local FrondUtils = require("FrondUtils")
+local FrondAttributeUtils = require("FrondAttributeUtils")
 
 local RxFrondUtils = {}
 
@@ -27,7 +27,7 @@ function RxFrondUtils.observeWantsFronding(instance: Instance)
 
 		local function attributeChanged(attributeName: string, value: any?)
 			-- Only care about frondable attributes.
-			if not String.startsWith(attributeName, FrondAttrs.FROND_ATTRIBUTE_PREFIX) then
+			if not FrondAttributeUtils.isFrondAttribute(attributeName) then
 				return
 			end
 			-- Keep?
@@ -79,10 +79,10 @@ function RxFrondUtils.mountVirtualFrondBrio(instance: Instance, parentFrond: tab
 
 		-- Update stats.
 		for attributeName, value in instance:GetAttributes() do
-			FrondAttrs.applyAttribute(frond, attributeName, value)
+			FrondAttrs.runHandlerCoded(frond, attributeName, value)
 		end
 		topMaid:GiveTask(instance.AttributeChanged:Connect(function(attributeName: string)
-			FrondAttrs.applyAttribute(frond, attributeName, instance:GetAttribute(attributeName))
+			FrondAttrs.runHandlerCoded(frond, attributeName, instance:GetAttribute(attributeName))
 		end))
 
 		-- Observe children, if possible.

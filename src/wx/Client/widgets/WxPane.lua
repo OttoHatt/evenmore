@@ -58,8 +58,8 @@ end
 function WxPane:_render()
 	return Blend.New("Frame")({
 		BackgroundTransparency = 1,
-		[FrondAttrs.StretchOnCrossAxis] = true,
 		[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_COLUMN,
+		[FrondAttrs.AlignItems] = FrondConstants.ALIGN_STRETCH,
 		Blend.New("Frame")({
 			BackgroundColor3 = WxColors["slate"][800],
 			[FrondAttrs.Padding] = self._paddingValue,
@@ -82,9 +82,9 @@ function WxPane:_render()
 		Blend.New("Frame")({
 			BackgroundColor3 = WxColors["slate"][800],
 			[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_ROW,
-			[FrondAttrs.ElementPadding] = self._paddingValue,
+			[FrondAttrs.Gap] = self._paddingValue,
 			[FrondAttrs.Padding] = self._paddingValue,
-			[FrondAttrs.AlignCrossFlow] = FrondConstants.ALIGN_MIDDLE,
+			[FrondAttrs.AlignItems] = FrondConstants.ALIGN_CENTER,
 			[Blend.Instance] = self._footerValue,
 			Blend.New("UICorner")({
 				CornerRadius = UDim.new(0, 8),

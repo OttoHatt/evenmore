@@ -15,7 +15,7 @@ local function makeFrondDemo(maid)
 		node:SetSizingX(FrondConstants.SIZING_PIXEL, 512)
 		node:SetSizingY(FrondConstants.SIZING_PIXEL, 1024)
 		node:SetPaddingXY(8)
-		node:SetElementPadding(128)
+		node:SetGap(128)
 		maid:GiveTask(node)
 		topNode = node
 	end

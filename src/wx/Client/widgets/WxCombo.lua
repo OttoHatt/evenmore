@@ -124,17 +124,17 @@ function WxCombo:_render()
 	return Blend.New("Frame")({
 		BackgroundTransparency = 1,
 		[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_COLUMN,
-		[FrondAttrs.ElementPadding] = 8,
+		[FrondAttrs.Gap] = 8,
 		Blend.New("TextButton")({
 			Text = "",
 			[Blend.OnEvent("Activated")] = function()
 				self._renderDropdownValue.Value = not self._renderDropdownValue.Value
 			end,
 			[FrondAttrs.Padding] = Vector2.new(24, 12),
-			[WxBackground.Polymorphic] = self._backgroundValue,
 			[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_ROW,
-			[FrondAttrs.AlignCrossFlow] = FrondConstants.ALIGN_MIDDLE,
-			[FrondAttrs.ElementPadding] = 8,
+			[FrondAttrs.AlignItems] = FrondConstants.ALIGN_CENTER,
+			[FrondAttrs.Gap] = 8,
+			[WxBackground.Polymorphic] = self._backgroundValue,
 			[Blend.Children] = {
 				Blend.New("UICorner")({
 					CornerRadius = UDim.new(0, 4),
@@ -155,7 +155,7 @@ function WxCombo:_render()
 			[FrondAttrs.Padding] = Vector2.new(0, 4),
 			[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_COLUMN,
 			[FrondAttrs.Ghost] = true,
-			[FrondAttrs.StretchOnCrossAxis] = true,
+			[FrondAttrs.AlignItems] = FrondConstants.ALIGN_STRETCH,
 			[FrondAttrs.Transform] = observeSpringSnappedVec2,
 			Blend.New("UICorner")({
 				CornerRadius = UDim.new(0, 4),
@@ -197,8 +197,8 @@ function WxCombo:_render()
 							Blend.New("Frame")({
 								BackgroundTransparency = 1,
 								[FrondAttrs.Padding] = Vector2.new(0, 0),
-								[FrondAttrs.AlignFlow] = FrondConstants.ALIGN_END,
-								[FrondAttrs.AlignCrossFlow] = FrondConstants.ALIGN_MIDDLE,
+								[FrondAttrs.JustifyContent] = FrondConstants.JUSTIFY_END,
+								[FrondAttrs.AlignItems] = FrondConstants.ALIGN_CENTER,
 								[FrondAttrs.Ghost] = true,
 								[FrondAttrs.WidthP] = 1,
 								[FrondAttrs.HeightP] = 1,
@@ -225,8 +225,8 @@ function WxCombo:_render()
 								BackgroundTransparency = 1,
 								[FrondAttrs.Padding] = Vector2.new(0, 12),
 								[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_ROW,
-								[FrondAttrs.ElementPadding] = 12,
-								[FrondAttrs.StretchOnCrossAxis] = true,
+								[FrondAttrs.Gap] = 12,
+								[FrondAttrs.AlignItems] = FrondConstants.ALIGN_STRETCH,
 								label.Gui,
 							}),
 							Blend.New("Frame")({

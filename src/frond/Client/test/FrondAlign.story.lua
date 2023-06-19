@@ -8,15 +8,15 @@ local BaseFrondNode = require("BaseFrondNode")
 local FrondConstants = require("FrondConstants")
 local GridFondNode = require("GridFondNode")
 
-local function makeTinyNode(maid, alignFlow, alignCross)
+local function makeTinyNode(maid, justifty, alignItems)
 	local topNode
 
 	do
 		local node = FlexFrondNode.new()
 		node:SetPaddingXY(8)
-		node:SetAlignFlow(alignFlow)
-		node:SetAlignCrossFlow(alignCross)
-		node:SetElementPadding(8)
+		node:SetJustifyContent(justifty)
+		node:SetAlignItems(alignItems)
+		node:SetGap(8)
 		node:SetSizingXY(FrondConstants.SIZING_SCALE, 1)
 		maid:GiveTask(node)
 		topNode = node
@@ -33,15 +33,15 @@ local function makeTinyNode(maid, alignFlow, alignCross)
 end
 
 local COMBOS = {
-	{ FrondConstants.ALIGN_START, FrondConstants.ALIGN_START },
-	{ FrondConstants.ALIGN_MIDDLE, FrondConstants.ALIGN_START },
-	{ FrondConstants.ALIGN_END, FrondConstants.ALIGN_START },
-	{ FrondConstants.ALIGN_START, FrondConstants.ALIGN_MIDDLE },
-	{ FrondConstants.ALIGN_MIDDLE, FrondConstants.ALIGN_MIDDLE },
-	{ FrondConstants.ALIGN_END, FrondConstants.ALIGN_MIDDLE },
-	{ FrondConstants.ALIGN_START, FrondConstants.ALIGN_END },
-	{ FrondConstants.ALIGN_MIDDLE, FrondConstants.ALIGN_END },
-	{ FrondConstants.ALIGN_END, FrondConstants.ALIGN_END },
+	{ FrondConstants.JUSTIFY_START, FrondConstants.ALIGN_START },
+	{ FrondConstants.JUSTIFY_CENTER, FrondConstants.ALIGN_START },
+	{ FrondConstants.JUSTIFY_END, FrondConstants.ALIGN_START },
+	{ FrondConstants.JUSTIFY_START, FrondConstants.ALIGN_CENTER },
+	{ FrondConstants.JUSTIFY_CENTER, FrondConstants.ALIGN_CENTER },
+	{ FrondConstants.JUSTIFY_END, FrondConstants.ALIGN_CENTER },
+	{ FrondConstants.JUSTIFY_START, FrondConstants.ALIGN_END },
+	{ FrondConstants.JUSTIFY_CENTER, FrondConstants.ALIGN_END },
+	{ FrondConstants.JUSTIFY_END, FrondConstants.ALIGN_END },
 }
 
 local function makeMainNode(maid)
@@ -51,7 +51,7 @@ local function makeMainNode(maid)
 		local node = GridFondNode.new()
 		node:SetSizingX(FrondConstants.SIZING_PIXEL, 1024 * 1)
 		node:SetElementsPerRow(4)
-		node:SetElementPadding(8)
+		node:SetGap(8)
 		maid:GiveTask(node)
 		topNode = node
 	end

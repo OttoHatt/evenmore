@@ -16,7 +16,7 @@ function GridFondNode.new(obj)
 	local self = setmetatable(BaseFrondNode.new(obj), GridFondNode)
 
 	self._elementsPerRow = 3
-	self._elementPadding = 0
+	self._gap = 0
 
 	return self
 end
@@ -26,8 +26,8 @@ function GridFondNode:SetElementsPerRow(count: number)
 	self:_markDirty()
 end
 
-function GridFondNode:SetElementPadding(padding: number)
-	self._elementPadding = padding
+function GridFondNode:SetGap(padding: number)
+	self._gap = padding
 	self:_markDirty()
 end
 
@@ -44,14 +44,14 @@ function GridFondNode:_onMeasureCallback(widthMeasureSpec: number, heightMeasure
 	end
 
 	-- TODO: Re-order arguments.
-	local cellLength = getCellLength(defaultX, self._elementPadding, self._elementsPerRow)
+	local cellLength = getCellLength(defaultX, self._gap, self._elementsPerRow)
 
 	for _, child in self:GetChildren() do
 		child:Measure(cellLength, cellLength)
 	end
 
 	local rowCount = math.ceil(#self:GetChildren() / self._elementsPerRow)
-	return defaultX, math.max(defaultY, rowCount * cellLength + (rowCount - 1) * self._elementPadding)
+	return defaultX, math.max(defaultY, rowCount * cellLength + (rowCount - 1) * self._gap)
 end
 
 function GridFondNode:_onLayoutCallback(l: number, _t: number, r: number, _b: number): nil
@@ -59,7 +59,7 @@ function GridFondNode:_onLayoutCallback(l: number, _t: number, r: number, _b: nu
 		return
 	end
 
-	local cellLength = getCellLength(r - l, self._elementPadding, self._elementsPerRow)
+	local cellLength = getCellLength(r - l, self._gap, self._elementsPerRow)
 
 	local offsetX, offsetY = 0, 0
 
@@ -70,11 +70,11 @@ function GridFondNode:_onLayoutCallback(l: number, _t: number, r: number, _b: nu
 			-- Wrap rows!
 			offsetX = 0
 			offsetY += cellLength
-			offsetY += self._elementPadding
+			offsetY += self._gap
 		else
 			-- Gap between elements in a row.
 			offsetX += cellLength
-			offsetX += self._elementPadding
+			offsetX += self._gap
 		end
 	end
 end

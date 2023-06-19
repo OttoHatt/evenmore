@@ -1,13 +1,26 @@
-return {
+local require = require(script.Parent.loader).load(script)
+
+local Table = require("Table")
+
+local CONSTANTS = {
 	-- TODO: Move symbols? This is quite hacky, and there's probably ovearhead in string comparisons...
-	SIZING_SCALE = "SizeModeScale",
-	SIZING_PIXEL = "SizeModePixel",
-	SIZING_UNSET = "SizeModeUnset",
+	SIZING_SCALE = "SizingScale",
+	SIZING_PIXEL = "SizingPixel",
+	SIZING_UNSET = "SizingUnset",
 
-	DIRECTION_ROW = "DirectionModeRow",
-	DIRECTION_COLUMN = "DirectionModeColumn",
+	DIRECTION_ROW = "DirectionRow",
+	DIRECTION_COLUMN = "DirectionColumn",
 
-	ALIGN_START = "AlignModeStart",
-	ALIGN_MIDDLE = "AlignModeMiddle",
-	ALIGN_END = "AlignModeEnd",
+	-- https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content.
+	JUSTIFY_START = "JustifyStart",
+	JUSTIFY_CENTER = "JustifyCenter",
+	JUSTIFY_END = "JustifyEnd",
+
+	-- https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
+	ALIGN_STRETCH = "AlignStretch",
+	ALIGN_START = "AlignStart",
+	ALIGN_CENTER = "AlignCenter",
+	ALIGN_END = "AlignEnd",
 }
+Table.deepReadonly(CONSTANTS)
+return CONSTANTS
