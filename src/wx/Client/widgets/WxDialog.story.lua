@@ -3,17 +3,10 @@ local require = require(game:GetService("ServerScriptService"):FindFirstChild("L
 local Maid = require("Maid")
 local WxDialog = require("WxDialog")
 local RxFrondUtils = require("RxFrondUtils")
-local FrondManagedUtils = require("FrondManagedUtils")
-local FrondConstants = require("FrondConstants")
-local FrondUtils = require("FrondUtils")
 
 return function(target)
 	local maid = Maid.new()
 
-	-- local rootFrond = FrondManagedUtils.mountFrond(target)
-	-- rootFrond:SetAlignFlow(FrondConstants.ALIGN_MIDDLE)
-	-- rootFrond:SetAlignCrossFlow(FrondConstants.ALIGN_MIDDLE)
-	-- maid:GiveTask(rootFrond)
 	local myTarget = Instance.new("Frame")
 	myTarget.BackgroundTransparency = 1
 	myTarget.Position = UDim2.new(0.5, 0, 0.5, 0)

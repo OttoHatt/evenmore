@@ -7,7 +7,6 @@
 local require = require(script.Parent.loader).load(script)
 
 local IMAGE_ARROW = "rbxassetid://13794403429"
--- local IMAGE_X = "rbxassetid://13794478132"
 
 local BaseObject = require("BaseObject")
 local ObservableList = require("ObservableList")
