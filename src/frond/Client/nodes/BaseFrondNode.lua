@@ -36,13 +36,19 @@ function BaseFrondNode.new()
 	self._maid:GiveTask(self._parentValue)
 
 	-- Children.
-	self.Children = {}
+	self.ChildAdded = GoodSignal.new()
+	self._maid:GiveTask(self.ChildAdded)
+
+	self.ChildRemoved = GoodSignal.new()
+	self._maid:GiveTask(self.ChildRemoved)
+
+	self._children = {}
 
 	-- Start needing re-layouting.
 	self._dirtyFlag = true
 
 	-- Default transform.
-	self._transform = Vector2.zero
+	self._transform = Vector3.zero
 
 	-- Sizing default.
 	self._xSizingMode = FrondConstants.SIZING_UNSET
@@ -82,15 +88,6 @@ function BaseFrondNode:ObservePositionUDim2()
 end
 
 function BaseFrondNode:ObserveChildrenBrio()
-	if not self.ChildAdded then
-		self.ChildAdded = GoodSignal.new()
-		self._maid:GiveTask(self.ChildAdded)
-	end
-	if not self.ChildRemoved then
-		self.ChildRemoved = GoodSignal.new()
-		self._maid:GiveTask(self.ChildRemoved)
-	end
-
 	return Observable.new(function(sub)
 		local maid = Maid.new()
 
@@ -116,17 +113,13 @@ end
 
 function BaseFrondNode:_addThisAsChild(child)
 	self:_markDirty()
-	table.insert(self.Children, child)
-	if self.ChildAdded then
-		self.ChildAdded:Fire(child)
-	end
+	table.insert(self._children, child)
+	self.ChildAdded:Fire(child)
 
 	return function()
 		-- TODO: Could get really slow if we're removing lots of elements?!
-		table.remove(self.Children, table.find(self.Children, child))
-		if self.ChildRemoved then
-			self.ChildRemoved:Fire(child)
-		end
+		table.remove(self._children, table.find(self._children, child))
+		self.ChildRemoved:Fire(child)
 	end
 end
 
@@ -300,7 +293,7 @@ function BaseFrondNode:ComputeLayout()
 end
 
 function BaseFrondNode:GetChildren()
-	return self.Children
+	return self._children
 end
 
 return BaseFrondNode
