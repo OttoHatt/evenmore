@@ -173,12 +173,14 @@ function FlexFrondNode:_onLayoutCallback(l: number, t: number, r: number, b: num
 		do
 			-- TODO: Nasty hack where we stretch the default position for % width elements...
 			-- TODO: How does this line up with the flexbox standard? Presumeably this is wrong...
+			-- TODO: Recomputing doesn't resize the container??
 			local measureX, measureY = child._measureX, child._measureY
-			if child._xSizingMode == FrondConstants.SIZING_SCALE then
-				measureX = (containerX - paddingX1 - paddingX2) * child._xSizingValue
-			end
-			if child._ySizingMode == FrondConstants.SIZING_SCALE then
-				measureY = (containerY - paddingY1 - paddingY2) * child._ySizingValue
+			if
+				child._xSizingMode == FrondConstants.SIZING_SCALE
+				or child._ySizingMode == FrondConstants.SIZING_SCALE
+			then
+				measureX, measureY =
+					child:_defaultMeasure(containerX - paddingX1 - paddingX2, containerY - paddingY1 - paddingY2)
 			end
 			sizeF, sizeC = FrondUtils.toFlowSpace(self._flowDirection, measureX, measureY)
 			if self._alignItemsMode == FrondConstants.ALIGN_STRETCH then

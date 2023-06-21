@@ -117,6 +117,13 @@ FrondAttrs.AlignItems = function(frond, value: any)
 		return ERR_WRONG_TYPE
 	end
 end
+FrondAttrs.AspectRatio = function(frond, value: any)
+	if typeof(value) == "number" then
+		frond:SetAspectRatio(value)
+	else
+		return ERR_WRONG_TYPE
+	end
+end
 
 local handlers = {}
 -- Switch this around in a loop to fake-out the LSP, getting the handlers to autocomplete.
@@ -128,7 +135,11 @@ end
 FrondAttrs._handlers = handlers
 
 function FrondAttrs.runHandlerCoded(frond, codedName: string, value: any): any
-	return FrondAttrs.runHandler(frond, FrondAttributeUtils.parseFrondAttributeName(codedName), value)
+	local attributeName: string? = FrondAttributeUtils.parseFrondAttributeName(codedName)
+
+	if attributeName then
+		FrondAttrs.runHandler(frond, attributeName, value)
+	end
 end
 
 function FrondAttrs.runHandler(frond, attributeName: string, value: any): (table, any) -> any

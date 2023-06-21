@@ -117,10 +117,10 @@ end
 
 function FrondUtils.bindComputerPerFrame(frond)
 	-- Immediately.
-	frond:ComputeLayout()
+	frond:ComputeLayout(math.huge, math.huge)
 	-- Then per frame.
 	return RunService.RenderStepped:Connect(function()
-		frond:ComputeLayout()
+		frond:ComputeLayout(math.huge, math.huge)
 	end)
 end
 

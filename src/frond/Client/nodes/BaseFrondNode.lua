@@ -54,6 +54,8 @@ function BaseFrondNode.new()
 	self._xSizingMode = FrondConstants.SIZING_UNSET
 	self._ySizingMode = FrondConstants.SIZING_UNSET
 
+	self._aspectRatio = 0
+
 	return self
 end
 
@@ -124,6 +126,9 @@ function BaseFrondNode:_addThisAsChild(child)
 end
 
 function BaseFrondNode:SetParent(parentNode)
+	-- When using this framework, parent nodes should be added to a maid last.
+	-- This tearing down the tree from the bottom-up.
+	-- Therefore, child elements should be 'own' the connection to their parent.
 	self._parentValue.Value = parentNode
 	self._maid._parentConn = parentNode:_addThisAsChild(self)
 
@@ -157,7 +162,7 @@ function BaseFrondNode:Measure(widthMeasureSpec: number, heightMeasureSpec: numb
 		return self._measureX, self._measureY
 	end
 
-	-- Should be slightly faster than indexing into ourselves each time...
+	-- Should be slightly faster than indexing ourselves...
 	local x, y
 
 	if self._onMeasureCallback then
@@ -174,8 +179,19 @@ end
 
 -- Measure the frond based purely on its parent. No contents or anything.
 function BaseFrondNode:_defaultMeasure(widthMeasureSpec: number, heightMeasureSpec: number): (number, number)
-	return FrondUtils.evaluateConstraint(widthMeasureSpec, self._xSizingMode, self._xSizingValue),
+	local x, y =
+		FrondUtils.evaluateConstraint(widthMeasureSpec, self._xSizingMode, self._xSizingValue),
 		FrondUtils.evaluateConstraint(heightMeasureSpec, self._ySizingMode, self._ySizingValue)
+	if self._aspectRatio ~= 0 then
+		-- Our dominant axis will be the length set explicitly.
+		-- TODO: What if both axes have definite sizing? Pick one?
+		if self._xSizingMode == FrondConstants.SIZING_UNSET then
+			x = self._aspectRatio * y
+		elseif self._ySizingMode == FrondConstants.SIZING_UNSET then
+			y = self._aspectRatio * x
+		end
+	end
+	return x, y
 end
 
 -- Applies size.
@@ -237,20 +253,23 @@ function BaseFrondNode:SetTransform(transform)
 	self:_markDirty()
 end
 
+function BaseFrondNode:SetAspectRatio(aspectRatio: number)
+	self._aspectRatio = aspectRatio
+	self:_markDirty()
+end
+
 -- Element has unset size. So its size *should* contribute... but we don't know it yet!
--- Evaluate first.
 function BaseFrondNode:HasUnsetEdge()
 	return self._xSizingMode == FrondConstants.SIZING_UNSET or self._ySizingMode == FrondConstants.SIZING_UNSET
 end
 
--- Element has a fixed size, which might push elements at this layer around.
--- Resolve next.
+-- Element has a fixed size, which might sibling elements around.
 function BaseFrondNode:HasFixedEdge()
 	return self._xSizingMode == FrondConstants.SIZING_PIXEL or self._ySizingMode == FrondConstants.SIZING_PIXEL
 end
 
--- Returns whether the is weakly sized, i.e. dependent on other elements in some way.
--- In this case, we resolve it last.
+-- Returns whether the node has a % sized edge, i.e. dependent on other elements in some way.
+-- Though note that this will never push other elements around, nor affect the size of the parent.
 function BaseFrondNode:HasScaledEdge()
 	return self._xSizingMode == FrondConstants.SIZING_SCALE or self._ySizingMode == FrondConstants.SIZING_SCALE
 end
@@ -278,14 +297,17 @@ function BaseFrondNode:_markDirty()
 	end
 end
 
-function BaseFrondNode:ComputeLayout()
+function BaseFrondNode:ComputeLayout(maxX: number, maxY: number)
+	assert(typeof(maxX) == "number", "Bad maxX")
+	assert(typeof(maxY) == "number", "Bad maxY")
+
 	-- TODO: Benchmark.
 	if not self._dirtyFlag then
 		return
 	end
 
 	-- Recursive layout + update.
-	self:Measure(math.huge, math.huge)
+	self:Measure(maxX, maxY)
 	self:Layout(0, 0, self._measureX, self._measureY)
 
 	-- Mark all clean again :).

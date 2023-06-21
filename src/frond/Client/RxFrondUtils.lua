@@ -75,7 +75,6 @@ function RxFrondUtils.mountVirtualFrondBrio(instance: Instance, parentFrond: tab
 
 		-- This frond :).
 		local frond = FlexFrondNode.new()
-		topMaid:GiveTask(frond)
 
 		-- Update stats.
 		for attributeName, value in instance:GetAttributes() do
@@ -105,6 +104,9 @@ function RxFrondUtils.mountVirtualFrondBrio(instance: Instance, parentFrond: tab
 			-- This frond has no parent, so it will always be the root node. Update it here.
 			topMaid:GiveTask(FrondUtils.bindComputerPerFrame(frond))
 		end
+
+		-- GC last, so we destroy the tree bottom-up.
+		topMaid:GiveTask(frond)
 	end)
 end
 
