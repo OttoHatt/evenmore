@@ -76,7 +76,9 @@ function WxPane:_render()
 		}),
 		Blend.New("Frame")({
 			BackgroundColor3 = WxColors["slate"][900],
+			[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_COLUMN,
 			[FrondAttrs.Padding] = self._paddingValue,
+			[FrondAttrs.Gap] = self._paddingValue,
 			[Blend.Instance] = self._bodyValue,
 		}),
 		Blend.New("Frame")({
