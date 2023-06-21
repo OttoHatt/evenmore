@@ -20,10 +20,6 @@ WxPane.__index = WxPane
 function WxPane.new(obj)
 	local self = setmetatable(BaseObject.new(obj), WxPane)
 
-	self._paddingValue = Instance.new("IntValue")
-	self._paddingValue.Value = 16
-	self._maid:GiveTask(self._paddingValue)
-
 	self._titleLabel = WxLabel.new()
 	self._titleLabel:SetText(("Responsive dialogue!"):upper())
 	self._titleLabel:SetTextSize(48)
@@ -56,16 +52,20 @@ function WxPane:GetBodySlot()
 end
 
 function WxPane:_render()
+	local PADDING = 16
+	-- local CORNER_RADIUS = 4 + PADDING
+	local CORNER_RADIUS = 8
+
 	return Blend.New("Frame")({
 		BackgroundTransparency = 1,
 		[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_COLUMN,
 		[FrondAttrs.AlignItems] = FrondConstants.ALIGN_STRETCH,
 		Blend.New("Frame")({
 			BackgroundColor3 = WxColors["slate"][800],
-			[FrondAttrs.Padding] = self._paddingValue,
+			[FrondAttrs.Padding] = PADDING,
 			self._titleLabel.Gui,
 			Blend.New("UICorner")({
-				CornerRadius = UDim.new(0, 8),
+				CornerRadius = UDim.new(0, CORNER_RADIUS),
 			}),
 			Blend.New("Frame")({
 				Size = UDim2.new(1, 0, 0.5, 0),
@@ -77,19 +77,19 @@ function WxPane:_render()
 		Blend.New("Frame")({
 			BackgroundColor3 = WxColors["slate"][900],
 			[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_COLUMN,
-			[FrondAttrs.Padding] = self._paddingValue,
-			[FrondAttrs.Gap] = self._paddingValue,
+			[FrondAttrs.Padding] = PADDING,
+			[FrondAttrs.Gap] = PADDING,
 			[Blend.Instance] = self._bodyValue,
 		}),
 		Blend.New("Frame")({
 			BackgroundColor3 = WxColors["slate"][800],
 			[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_ROW,
-			[FrondAttrs.Gap] = self._paddingValue,
-			[FrondAttrs.Padding] = self._paddingValue,
+			[FrondAttrs.Gap] = PADDING,
+			[FrondAttrs.Padding] = PADDING,
 			[FrondAttrs.AlignItems] = FrondConstants.ALIGN_CENTER,
 			[Blend.Instance] = self._footerValue,
 			Blend.New("UICorner")({
-				CornerRadius = UDim.new(0, 8),
+				CornerRadius = UDim.new(0, CORNER_RADIUS),
 			}),
 			Blend.New("Frame")({
 				Size = UDim2.new(1, 0, 0.5, 0),
