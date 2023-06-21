@@ -126,42 +126,6 @@ function FlexFrondNode:_onMeasureCallback(widthMeasureSpec: number, heightMeasur
 	end
 end
 
--- Track aligning on a given align mode axis.
-local function spaceJustifyContent(
-	mode,
-	containerS: number,
-	paddingS1: number,
-	paddingS2: number,
-	boundsS: number,
-	trackS: number
-)
-	if mode == FrondConstants.JUSTIFY_START then
-		return paddingS1 + trackS
-	elseif mode == FrondConstants.JUSTIFY_CENTER then
-		return containerS / 2 - boundsS / 2 + trackS
-	elseif mode == FrondConstants.JUSTIFY_END then
-		return containerS - paddingS2 - boundsS + trackS
-	end
-end
-local function spaceAlignItems(
-	mode,
-	containerS: number,
-	paddingS1: number,
-	paddingS2: number,
-	boundsS: number,
-	sizeS: number
-)
-	if mode == FrondConstants.ALIGN_STRETCH then
-		return paddingS1
-	elseif mode == FrondConstants.ALIGN_START then
-		return paddingS1
-	elseif mode == FrondConstants.ALIGN_CENTER then
-		return containerS / 2 - boundsS / 2 + (boundsS - sizeS) / 2
-	elseif mode == FrondConstants.ALIGN_END then
-		return containerS - paddingS2 - boundsS + (boundsS - sizeS)
-	end
-end
-
 function FlexFrondNode:_onLayoutCallback(l: number, t: number, r: number, b: number): nil
 	-- All subsequent logic lays out children. We can simply ignore it.
 	if #self:GetChildren() == 0 then
@@ -184,13 +148,31 @@ function FlexFrondNode:_onLayoutCallback(l: number, t: number, r: number, b: num
 	local paddingF2, paddingC2 = FrondUtils.toFlowSpace(self._flowDirection, paddingX2, paddingY2)
 
 	-- Shared between laying out elements, so we can shift things on the page.
-	local trackF, trackC = 0, 0
+	local trackF: number
+	if self._justifyContentMode == FrondConstants.JUSTIFY_START then
+		trackF = paddingF1
+	elseif self._justifyContentMode == FrondConstants.JUSTIFY_CENTER then
+		trackF = paddingF1 + (containerF - paddingF1 - paddingF2) / 2 - boundsF / 2
+	elseif self._justifyContentMode == FrondConstants.JUSTIFY_END then
+		trackF = containerF - paddingF2 - boundsF
+	end
+
+	-- Anchor point positioning.
+	local anchorC: number = 0
+	if self._alignItemsMode == FrondConstants.ALIGN_START then
+		anchorC = 0
+	elseif self._alignItemsMode == FrondConstants.ALIGN_CENTER then
+		anchorC = 0.5
+	elseif self._justifyContentMode == FrondConstants.ALIGN_END then
+		anchorC = 1
+	end
 
 	for _, child in self:GetChildren() do
 		-- Child measurements.
-		-- TODO: Nasty hack where we stretch the default position for % width elements...
 		local sizeF, sizeC
 		do
+			-- TODO: Nasty hack where we stretch the default position for % width elements...
+			-- TODO: How does this line up with the flexbox standard? Presumeably this is wrong...
 			local measureX, measureY = child._measureX, child._measureY
 			if child._xSizingMode == FrondConstants.SIZING_SCALE then
 				measureX = (containerX - paddingX1 - paddingX2) * child._xSizingValue
@@ -203,27 +185,20 @@ function FlexFrondNode:_onLayoutCallback(l: number, t: number, r: number, b: num
 				sizeC = boundsC
 			end
 		end
-		-- Child offset.
-		local offX, offY
-		do
-			-- Local copy of offsets that we can manipulate.
-			local offsetF =
-				spaceJustifyContent(self._justifyContentMode, containerF, paddingF1, paddingF2, boundsF, trackF)
-			local offsetC = spaceAlignItems(self._alignItemsMode, containerC, paddingC1, paddingC2, boundsC, sizeC)
-
-			offX, offY = FrondUtils.toPixelSpace(self._flowDirection, offsetF, offsetC)
-			offX += child._transform.X
-			offY += child._transform.Y
-		end
+		-- Child offset on cross-axis.
+		local offsetC = paddingC1 + -anchorC * sizeC + (containerC - paddingC1 - paddingC2) * anchorC
 		-- Combine and move.
 		do
+			local offX, offY = FrondUtils.toPixelSpace(self._flowDirection, trackF, offsetC)
+			offX += child._transform.X
+			offY += child._transform.Y
+
 			local sizeX, sizeY = FrondUtils.toPixelSpace(self._flowDirection, sizeF, sizeC)
 			child:Layout(offX, offY, offX + sizeX, offY + sizeY)
 		end
 		-- Ghost elements don't push others around on the page.
 		if not child._ghost then
 			trackF += sizeF + self._gap
-			trackC += sizeC
 		end
 	end
 end
