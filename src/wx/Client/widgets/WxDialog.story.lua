@@ -24,7 +24,7 @@ return function(target)
 	dialog.Gui.AnchorPoint = Vector2.new(0.5, 0.5)
 	maid:GiveTask(dialog)
 
-	maid:GiveTask(RxFrondUtils.mountVirtualFrondBrio(dialog.Gui))
+	maid:GiveTask(RxFrondUtils.mountVirtualFrond(dialog.Gui))
 
 	debug.profileend()
 

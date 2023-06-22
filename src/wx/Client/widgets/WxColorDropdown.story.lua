@@ -35,7 +35,7 @@ return function(target)
 	debug.profileend()
 
 	debug.profilebegin("WxColorDropdown.story::Mount")
-	maid:GiveTask(RxFrondUtils.mountVirtualFrondBrio(dialog.Gui))
+	maid:GiveTask(RxFrondUtils.mountVirtualFrond(dialog.Gui))
 	debug.profileend()
 
 	debug.profileend()

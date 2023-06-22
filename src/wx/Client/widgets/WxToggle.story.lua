@@ -26,7 +26,7 @@ return function(target)
 		maid:GiveTask(toggle)
 	end
 
-	maid:GiveTask(RxFrondUtils.mountVirtualFrondBrio(dialog.Gui))
+	maid:GiveTask(RxFrondUtils.mountVirtualFrond(dialog.Gui))
 
 	return function()
 		maid:DoCleaning()
