@@ -1,8 +1,4 @@
-local require = require(script.Parent.loader).load(script)
-
-local Table = require("Table")
-
-return Table.deepReadonly({
+return table.freeze({
 	-- List of nice-looking, generic-ish fonts that you can use everywhere in a UI.
 	-- Functions accepting these types must be polymorphic.
 	-- https://create.roblox.com/docs/reference/engine/datatypes/Font.

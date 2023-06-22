@@ -8,15 +8,18 @@ local require = require(script.Parent.loader).load(script)
 
 local IMAGE_ARROW = "rbxassetid://13794403429"
 
+local UserInputService = game:GetService("UserInputService")
+
 local BaseObject = require("BaseObject")
 local Blend = require("Blend")
 local FrondAttrs = require("FrondAttrs")
-local WxBackground = require("WxBackground")
-local ValueObject = require("ValueObject")
-local WxLabel = require("WxLabel")
-local WxColors = require("WxColors")
 local FrondConstants = require("FrondConstants")
-local WxInteractUtils = require("WxInteractUtils")
+local RxBrioUtils = require("RxBrioUtils")
+local ValueObject = require("ValueObject")
+local WxBackground = require("WxBackground")
+local WxLabel = require("WxLabel")
+local WxLabelUtils = require("WxLabelUtils")
+local WxNeoColors = require("WxNeoColors")
 
 local WxDropdown = setmetatable({}, BaseObject)
 WxDropdown.ClassName = "WxDropdown"
@@ -26,8 +29,9 @@ function WxDropdown.new(obj)
 	local self = setmetatable(BaseObject.new(obj), WxDropdown)
 
 	self._backgroundValue = ValueObject.new()
-	self._backgroundValue.Value = { WxColors["slate"][600], WxColors["slate"][700] }
+	self._backgroundValue.Value = { WxNeoColors.nudes[600] }
 	self._maid:GiveTask(self._backgroundValue)
+
 	self._renderDropdownValue = ValueObject.new(false, "boolean")
 	self._maid:GiveTask(self._renderDropdownValue)
 
@@ -37,27 +41,14 @@ function WxDropdown.new(obj)
 	self._textSlotValue = Instance.new("ObjectValue")
 	self._maid:GiveTask(self._textSlotValue)
 
-	self._label = self:_makeLabel()
+	self._label = WxLabelUtils.makeActionLabel()
 	self._maid:GiveTask(self._label)
 
 	self._maid:GiveTask(self:_render():Subscribe(function(gui)
 		self.Gui = gui
 	end))
 
-	-- Sync in selection.
-
-	self._handle = WxInteractUtils.makeHandle()
-	self._maid:GiveTask(self._renderDropdownValue:Mount(WxInteractUtils.observeSelectionBool(self.Gui, self._handle)))
-
 	return self
-end
-
--- Create a standard-sized label for this control, to keep things constistent.
-function WxDropdown:_makeLabel()
-	local label = WxLabel.new()
-	label:SetTextSize(24)
-	label:SetWeight(Enum.FontWeight.SemiBold)
-	return label
 end
 
 function WxDropdown:SetBackground(...)
@@ -69,15 +60,15 @@ function WxDropdown:SetText(title: string)
 end
 
 function WxDropdown:ShowDropdown()
-	WxInteractUtils.pushSelection(self.Gui, self._handle)
+	self._renderDropdownValue.Value = true
 end
 
 function WxDropdown:HideDropdown()
-	WxInteractUtils.clearSelection(self.Gui, self._handle)
+	self._renderDropdownValue.Value = false
 end
 
 function WxDropdown:ToggleDropdown()
-	WxInteractUtils.toggleSelection(self.Gui, self._handle)
+	self._renderDropdownValue.Value = not self._renderDropdownValue.Value
 end
 
 function WxDropdown:GetTextSlot()
@@ -92,6 +83,24 @@ function WxDropdown:ObserveDropdownVisible()
 	return self._renderDropdownValue:Observe()
 end
 
+function WxDropdown:ObserveDropdownVisibleBrio()
+	return self._renderDropdownValue:Observe():Pipe({
+		RxBrioUtils.switchToBrio(),
+		RxBrioUtils.where(function(visible: boolean)
+			return visible == true
+		end),
+	})
+end
+
+local function isOutOfBounds(gui: GuiBase2d, point: Vector3)
+	local worldPosition = gui.AbsolutePosition
+	local worldSize: Vector2 = gui.AbsoluteSize
+
+	local offset = Vector3.new(point.X - worldPosition.X, point.Y - worldPosition.Y)
+
+	return offset.X < 0 or offset.X > worldSize.X or offset.Y < 0 or offset.Y > worldSize.Y
+end
+
 function WxDropdown:_render()
 	local observeDistance = Blend.Computed(self._renderDropdownValue, function(render: boolean)
 		return if render then 0 else -4
@@ -100,6 +109,26 @@ function WxDropdown:_render()
 	local observeSpringSnappedVec2 = Blend.Computed(observeSpring, function(value: number)
 		return Vector2.new(0, math.round(value))
 	end)
+
+	self._maid:GiveTask(self:ObserveDropdownVisibleBrio():Subscribe(function(brio)
+		local maid = brio:ToMaid()
+
+		maid:GiveTask(UserInputService.InputBegan:Connect(function(input: InputObject, _gameProcessed: boolean)
+			-- We intentionally catch 'gameProcessed' events, as this could be clicking on other GUIs.
+			-- Ensure mouse click was totally outside of our element.
+			if
+				input.UserInputType == Enum.UserInputType.MouseButton1
+				and isOutOfBounds(self:GetDropdownSlot(), input.Position)
+				and isOutOfBounds(self.Gui, input.Position)
+			then
+				maid._unclick = input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						self:HideDropdown()
+					end
+				end)
+			end
+		end))
+	end))
 
 	return Blend.New("Frame")({
 		BackgroundTransparency = 1,
@@ -145,7 +174,7 @@ function WxDropdown:_render()
 		}),
 		Blend.New("Frame")({
 			BackgroundTransparency = 0,
-			BackgroundColor3 = WxColors["slate"][700],
+			BackgroundColor3 = WxNeoColors.nudes[400],
 			Visible = self._renderDropdownValue,
 			[FrondAttrs.Padding] = Vector2.new(0, 4),
 			[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_COLUMN,

@@ -25,7 +25,7 @@ function WxButton.new(obj)
 	self._maid:GiveTask(self.Activated)
 
 	self._label = WxLabel.new()
-	self._label:SetTextSize(24)
+	self._label:SetSize(24)
 	self._label:SetWeight(Enum.FontWeight.SemiBold)
 	self._maid:GiveTask(self._label)
 

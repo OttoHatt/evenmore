@@ -7,20 +7,22 @@
 local require = require(script.Parent.loader).load(script)
 
 local BaseObject = require("BaseObject")
-local ObservableList = require("ObservableList")
 local Blend = require("Blend")
-local FrondAttrs = require("FrondAttrs")
-local ValueObject = require("ValueObject")
-local RxBrioUtils = require("RxBrioUtils")
-local Observable = require("Observable")
-local Maid = require("Maid")
 local Brio = require("Brio")
-local GoodSignal = require("GoodSignal")
-local Rx = require("Rx")
-local WxColors = require("WxColors")
-local FrondConstants = require("FrondConstants")
 local ButtonHighlightModel = require("ButtonHighlightModel")
+local FrondAttrs = require("FrondAttrs")
+local FrondConstants = require("FrondConstants")
+local GoodSignal = require("GoodSignal")
+local Maid = require("Maid")
+local Observable = require("Observable")
+local ObservableList = require("ObservableList")
+local Rx = require("Rx")
+local RxBrioUtils = require("RxBrioUtils")
+local ValueObject = require("ValueObject")
 local WxDropdown = require("WxDropdown")
+local WxLabelUtils = require("WxLabelUtils")
+local WxNeoColors = require("WxNeoColors")
+local WxTransparencies = require("WxTransparencies")
 
 local WxCombo = setmetatable({}, BaseObject)
 WxCombo.ClassName = "WxCombo"
@@ -77,7 +79,9 @@ function WxCombo.new(obj)
 		self._dropdown:SetText(text or "")
 	end))
 
-	self._maid:GiveTask(self:_renderDropdownContents())
+	self._maid:GiveTask(self._dropdown:ObserveDropdownVisibleBrio():Subscribe(function(brio)
+		brio:ToMaid():GiveTask(self:_renderDropdownContents())
+	end))
 
 	return self
 end
@@ -103,10 +107,11 @@ function WxCombo:_renderDropdownContents()
 		maid:GiveTask(model)
 
 		-- TODO: Referencing this kinda sucks?
-		local label = self._dropdown:_makeLabel()
+		local label = WxLabelUtils.makeActionLabel()
 		label:SetText(option)
 		maid:GiveTask(model:ObserveIsMouseOrTouchOver():Subscribe(function(hover: boolean)
-			label:SetColor(if hover then WxColors["slate"][50] else WxColors["slate"][400])
+			label:SetColor(Color3.new(0, 0, 0))
+			label:SetTransparency(if hover then WxTransparencies[900] else WxTransparencies[500])
 		end))
 		label:SetWeight(Enum.FontWeight.Medium)
 		maid:GiveTask(label)
@@ -114,7 +119,7 @@ function WxCombo:_renderDropdownContents()
 		maid:GiveTask(Blend.New("TextButton")({
 			Text = "",
 			BackgroundColor3 = Blend.Computed(model:ObserveIsMouseOrTouchOver(), function(hover: boolean)
-				return if hover then WxColors["slate"][500] else WxColors["slate"][700]
+				return if hover then WxNeoColors.nudes[200] else WxNeoColors.nudes[400]
 			end),
 			[FrondAttrs.Padding] = 0,
 			[Blend.Instance] = function(instance: Instance)
@@ -122,7 +127,7 @@ function WxCombo:_renderDropdownContents()
 			end,
 			[Blend.OnEvent("Activated")] = function()
 				self._optionChosen:Fire(option)
-				self._dropdown:HideToggle()
+				self._dropdown:HideDropdown()
 			end,
 			Blend.New("Frame")({
 				BackgroundTransparency = 1,
@@ -140,7 +145,10 @@ function WxCombo:_renderDropdownContents()
 					Font = Enum.Font.FredokaOne,
 					TextXAlignment = Enum.TextXAlignment.Center,
 					TextYAlignment = Enum.TextYAlignment.Center,
-					TextColor3 = WxColors["slate"][300],
+					TextColor3 = Color3.new(0, 0, 0),
+					TextTransparency = Blend.Computed(model:ObserveIsMouseOrTouchOver(), function(hover: boolean)
+						return if hover then WxTransparencies[400] else WxTransparencies[200]
+					end),
 					Visible = Blend.Computed(self._selectedValue, function(selected)
 						return selected == option
 					end),

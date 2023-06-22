@@ -12,6 +12,7 @@ local Blend = require("Blend")
 local HSVColorPicker = require("HSVColorPicker")
 local Maid = require("Maid")
 local FrondAttrs = require("FrondAttrs")
+local ValueObject = require("ValueObject")
 
 local WxColorDropdown = setmetatable({}, BaseObject)
 WxColorDropdown.ClassName = "WxColorDropdown"
@@ -24,15 +25,29 @@ function WxColorDropdown.new(obj)
 	self.Gui = self._dropdown.Gui
 	self._maid:GiveTask(self._dropdown)
 
-	self._colorValue = Instance.new("Color3Value")
-	self._colorValue.Value = Color3.new(1, 1, 1)
+	self._colorValue = ValueObject.new(Color3.new(1,1,1), "Color3")
 	self._maid:GiveTask(self._colorValue)
-
-	self._dropdown:SetText("Hello")
+	self.ColorChanged = self._colorValue.Changed
 
 	self._maid:GiveTask(self:_renderDropdownContents())
 
 	return self
+end
+
+function WxColorDropdown:SetColor(color: Color3)
+	self._colorValue.Value = color
+end
+
+function WxColorDropdown:ObserveColor()
+	return self._colorValue:Observe()
+end
+
+function WxColorDropdown:SetText(...)
+	self._dropdown:SetText(...)
+end
+
+function WxColorDropdown:SetBackground(...)
+	self._dropdown:SetBackground(...)
 end
 
 function WxColorDropdown:_renderDropdownContents()

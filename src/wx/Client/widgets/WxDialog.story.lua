@@ -7,6 +7,10 @@ local RxFrondUtils = require("RxFrondUtils")
 return function(target)
 	local maid = Maid.new()
 
+	local t = os.clock()
+
+	debug.profilebegin("WxDialog.story")
+
 	local myTarget = Instance.new("Frame")
 	myTarget.BackgroundTransparency = 1
 	myTarget.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -21,6 +25,10 @@ return function(target)
 	maid:GiveTask(dialog)
 
 	maid:GiveTask(RxFrondUtils.mountVirtualFrondBrio(dialog.Gui))
+
+	debug.profileend()
+
+	print(os.clock() - t)
 
 	return function()
 		maid:DoCleaning()
