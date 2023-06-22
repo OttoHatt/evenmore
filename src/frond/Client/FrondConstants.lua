@@ -1,7 +1,3 @@
-local require = require(script.Parent.loader).load(script)
-
-local Table = require("Table")
-
 local CONSTANTS = {
 	-- TODO: Move symbols? This is quite hacky, and there's probably ovearhead in string comparisons...
 	SIZING_SCALE = "SizingScale",
@@ -22,5 +18,5 @@ local CONSTANTS = {
 	ALIGN_CENTER = "AlignCenter",
 	ALIGN_END = "AlignEnd",
 }
-Table.deepReadonly(CONSTANTS)
+
 return CONSTANTS

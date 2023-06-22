@@ -2,7 +2,10 @@ local require = require(script.Parent.loader).load(script)
 
 local FrondConstants = require("FrondConstants")
 local Symbol = require("Symbol")
-local FrondAttributeUtils = require("FrondAttributeUtils")
+local Blend = require("Blend")
+local Observable = require("Observable")
+local FrondLut = require("FrondLut")
+local Maid = require("Maid")
 
 local ERR_WRONG_TYPE = Symbol.named("BadPropertyType")
 
@@ -125,22 +128,48 @@ FrondAttrs.AspectRatio = function(frond, value: any)
 	end
 end
 
+local function makeAttributeFactory(attributeName: string)
+	assert(typeof(attributeName) == "string", "Bad attributeName")
+
+	return function(parent: Instance, content)
+		assert(typeof(parent) == "Instance", "Bad parent")
+
+		-- TODO: Typecheck 'content'. Could be an observable/primitive of number, Vector2, Vector3, etc.
+		-- Hackily set the attribute and reflect it to our virtual frond DOM.
+		-- We use an observable as function keys are passed to 'Blend.toEventObservable'.
+		local propertyObservable = Blend.toPropertyObservable(content)
+		if propertyObservable then
+			return Observable.new(function()
+				local maid = Maid.new()
+
+				local frond, removeRef = FrondLut:Get(parent)
+				maid:GiveTask(removeRef)
+
+				maid:GiveTask(propertyObservable:Subscribe(function(value: any?)
+					FrondAttrs.runHandler(frond, attributeName, value)
+				end))
+
+				return maid
+			end)
+		else
+			-- Let's just hope this is a primitive, serializable type..!
+			local frond, removeRef = FrondLut:Get(parent)
+			FrondAttrs.runHandler(frond, attributeName, content)
+			return Observable.new(function()
+				return removeRef
+			end)
+		end
+	end
+end
+
 local handlers = {}
 -- Switch this around in a loop to fake-out the LSP, getting the handlers to autocomplete.
 -- TODO: Replace this hacky meta-programming...
 for attributeName, handler in FrondAttrs do
 	handlers[attributeName] = handler
-	FrondAttrs[attributeName] = FrondAttributeUtils.makeAttributeFactory(attributeName)
+	FrondAttrs[attributeName] = makeAttributeFactory(attributeName)
 end
 FrondAttrs._handlers = handlers
-
-function FrondAttrs.runHandlerCoded(frond, codedName: string, value: any): any
-	local attributeName: string? = FrondAttributeUtils.parseFrondAttributeName(codedName)
-
-	if attributeName then
-		FrondAttrs.runHandler(frond, attributeName, value)
-	end
-end
 
 function FrondAttrs.runHandler(frond, attributeName: string, value: any): (table, any) -> any
 	assert(typeof(frond) == "table", "Bad frond")
