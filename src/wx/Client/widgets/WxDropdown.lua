@@ -16,8 +16,6 @@ local FrondAttrs = require("FrondAttrs")
 local FrondConstants = require("FrondConstants")
 local RxBrioUtils = require("RxBrioUtils")
 local ValueObject = require("ValueObject")
-local WxBackground = require("WxBackground")
-local WxLabel = require("WxLabel")
 local WxLabelUtils = require("WxLabelUtils")
 local WxNeoColors = require("WxNeoColors")
 
@@ -28,8 +26,7 @@ WxDropdown.__index = WxDropdown
 function WxDropdown.new(obj)
 	local self = setmetatable(BaseObject.new(obj), WxDropdown)
 
-	self._backgroundValue = ValueObject.new()
-	self._backgroundValue.Value = { WxNeoColors.nudes[600] }
+	self._backgroundValue = ValueObject.new(WxNeoColors.nudes[600], "Color3")
 	self._maid:GiveTask(self._backgroundValue)
 
 	self._renderDropdownValue = ValueObject.new(false, "boolean")
@@ -113,7 +110,7 @@ function WxDropdown:_render()
 	self._maid:GiveTask(self:ObserveDropdownVisibleBrio():Subscribe(function(brio)
 		local maid = brio:ToMaid()
 
-		maid:GiveTask(UserInputService.InputBegan:Connect(function(input: InputObject, _gameProcessed: boolean)
+		maid._conn = UserInputService.InputBegan:Connect(function(input: InputObject, _gameProcessed: boolean)
 			-- We intentionally catch 'gameProcessed' events, as this could be clicking on other GUIs.
 			-- Ensure mouse click was totally outside of our element.
 			if
@@ -121,13 +118,15 @@ function WxDropdown:_render()
 				and isOutOfBounds(self:GetDropdownSlot(), input.Position)
 				and isOutOfBounds(self.Gui, input.Position)
 			then
-				maid._unclick = input.Changed:Connect(function()
+				-- Disconnect our first handler. We now only care when the mouse is released!
+				-- TODO: Will this work on mobile?
+				maid._conn = input.Changed:Connect(function()
 					if input.UserInputState == Enum.UserInputState.End then
 						self:HideDropdown()
 					end
 				end)
 			end
-		end))
+		end)
 	end))
 
 	return Blend.New("Frame")({
@@ -139,6 +138,7 @@ function WxDropdown:_render()
 		[FrondAttrs.Gap] = 8,
 		Blend.New("TextButton")({
 			Text = "",
+			BackgroundColor3 = self._backgroundValue,
 			[Blend.OnEvent("Activated")] = function()
 				self:ToggleDropdown()
 			end,
@@ -147,7 +147,6 @@ function WxDropdown:_render()
 			[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_ROW,
 			[FrondAttrs.AlignItems] = FrondConstants.ALIGN_CENTER,
 			[FrondAttrs.Gap] = 8,
-			[WxBackground.Polymorphic] = self._backgroundValue,
 			[Blend.Children] = {
 				Blend.New("UICorner")({
 					CornerRadius = UDim.new(0, 4),

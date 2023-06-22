@@ -12,10 +12,8 @@ local BaseObject = require("BaseObject")
 local Blend = require("Blend")
 local FrondAttrs = require("FrondAttrs")
 local FrondConstants = require("FrondConstants")
-local WxLabel = require("WxLabel")
-local WxNeoColors = require("WxNeoColors")
-local WxTheme = require("WxTheme")
 local WxLabelUtils = require("WxLabelUtils")
+local WxNeoColors = require("WxNeoColors")
 
 local WxPane = setmetatable({}, BaseObject)
 WxPane.ClassName = "WxPane"

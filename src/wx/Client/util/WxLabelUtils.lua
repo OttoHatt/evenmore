@@ -26,6 +26,10 @@ function WxLabelUtils.makeTitleLabel()
 	return WxLabelUtils.makeFromDefinition(WxTheme.TEXT_STYLE_TITLE)
 end
 
+function WxLabelUtils.makeSubTitleLabel()
+	return WxLabelUtils.makeFromDefinition(WxTheme.TEXT_STYLE_SUBTITLE)
+end
+
 function WxLabelUtils.makeBodyLabel()
 	return WxLabelUtils.makeFromDefinition(WxTheme.TEXT_STYLE_BODY)
 end

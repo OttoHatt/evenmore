@@ -10,9 +10,9 @@ local BaseObject = require("BaseObject")
 local Blend = require("Blend")
 local WxButton = require("WxButton")
 local WxCombo = require("WxCombo")
-local WxPane = require("WxPane")
-local WxNeoColors = require("WxNeoColors")
 local WxLabelUtils = require("WxLabelUtils")
+local WxNeoColors = require("WxNeoColors")
+local WxPane = require("WxPane")
 
 local WxDialog = setmetatable({}, BaseObject)
 WxDialog.ClassName = "WxDialog"

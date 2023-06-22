@@ -40,7 +40,7 @@ end
 
 function RefCountedLut:WeakGet(key: any): any?
 	local node: RefNode? = self._nodeLut[key]
-	return node and node.Obj
+	return if node then node.Obj else nil
 end
 
 function RefCountedLut:_getAndPushRef(key: any): RefNode

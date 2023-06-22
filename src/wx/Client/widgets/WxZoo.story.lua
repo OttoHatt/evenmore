@@ -7,12 +7,15 @@ local Maid = require("Maid")
 local RxFrondUtils = require("RxFrondUtils")
 local WxColorDropdown = require("WxColorDropdown")
 local WxDialog = require("WxDialog")
+local WxLabelUtils = require("WxLabelUtils")
 local WxToggle = require("WxToggle")
 
 return function(target)
 	local maid = Maid.new()
 
 	local t = os.clock()
+
+	debug.profilebegin("WxZoo.story::create")
 
 	local myTarget = Instance.new("Frame")
 	myTarget.BackgroundTransparency = 1
@@ -38,6 +41,12 @@ return function(target)
 	-- 	}
 	-- }))
 
+	do
+		local label = WxLabelUtils.makeSubTitleLabel()
+		label:SetText("Settings")
+		label.Gui.Parent = dialog:GetBodySlot()
+		maid:GiveTask(label)
+	end
 	do
 		local TITLES = table.freeze({
 			"Enable sound effects",
@@ -77,7 +86,11 @@ return function(target)
 	-- 	maid:GiveTask(toggle)
 	-- end
 
-	maid:GiveTask(RxFrondUtils.mountVirtualFrondBrio(dialog.Gui))
+	debug.profileend()
+
+	debug.profilebegin("WxZoo.story::mount")
+	maid:GiveTask(RxFrondUtils.mountVirtualFrond(dialog.Gui))
+	debug.profileend()
 
 	print(os.clock() - t)
 

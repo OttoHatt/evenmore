@@ -16,7 +16,6 @@ local FrondConstants = require("FrondConstants")
 local ValueObject = require("ValueObject")
 local WxLabelUtils = require("WxLabelUtils")
 local WxNeoColors = require("WxNeoColors")
-local WxTransparencies = require("WxTransparencies")
 
 local WxToggle = setmetatable({}, BaseObject)
 WxToggle.ClassName = "WxToggle"
@@ -71,15 +70,14 @@ function WxToggle:_render()
 			[FrondAttrs.Size] = FIXED_HEIGHT,
 			[FrondAttrs.Padding] = 2,
 			Blend.New("Frame")({
+				BackgroundColor3 = Color3.new(1, 1, 1),
 				[FrondAttrs.WidthP] = 1,
 				[FrondAttrs.HeightP] = 1,
-				BackgroundColor3 = Color3.new(1, 1, 1),
-				[FrondAttrs.Padding] = 4,
+				[FrondAttrs.Padding] = 7,
 				Blend.New("ImageLabel")({
 					[FrondAttrs.WidthP] = 1,
 					[FrondAttrs.HeightP] = 1,
 					ImageColor3 = Blend.Computed(self._stateValue, function(checked: boolean)
-						-- return if checked then WxNeoColors.subs[6] else WxNeoColors.subs[3]
 						return if checked then WxNeoColors.success[400] else WxNeoColors.danger[400]
 					end),
 					BackgroundTransparency = 1,
