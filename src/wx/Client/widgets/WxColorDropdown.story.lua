@@ -4,7 +4,6 @@ local Maid = require("Maid")
 local RxFrondUtils = require("RxFrondUtils")
 local WxColorDropdown = require("WxColorDropdown")
 local WxPane = require("WxPane")
-local WxInteractUtils = require("WxInteractUtils")
 
 return function(target)
 	local maid = Maid.new()
@@ -19,7 +18,6 @@ return function(target)
 	myTarget.BackgroundTransparency = 1
 	myTarget.Position = UDim2.new(0.5, 0, 0.5, 0)
 	myTarget.Parent = target
-	maid:GiveTask(WxInteractUtils.markAsTray(myTarget))
 	maid:GiveTask(myTarget)
 
 	local dialog = WxPane.new()
