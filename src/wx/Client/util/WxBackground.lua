@@ -7,8 +7,8 @@
 local require = require(script.Parent.loader).load(script)
 
 local Blend = require("Blend")
-local Observable = require("Observable")
 local Maid = require("Maid")
+local Observable = require("Observable")
 
 local WxBackground = {}
 
@@ -28,7 +28,10 @@ function WxBackground.Polymorphic(parent, topValue)
 		end
 
 		local function handleValue(value: { Color3 } | ColorSequence | Color3 | nil)
-			if typeof(value) == "table" then
+			if typeof(value) == "table" and #value == 1 then
+				maid._gradient = nil
+				parent.BackgroundColor3 = value[1]
+			elseif typeof(value) == "table" then
 				parent.BackgroundColor3 = Color3.new(1, 1, 1)
 
 				-- TODO: Support >2 colors!
