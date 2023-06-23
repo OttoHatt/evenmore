@@ -28,12 +28,9 @@ function WxToggle.new(obj)
 	self._maid:GiveTask(self._stateValue)
 
 	-- Keep in sync with button class?
-	self._label = WxLabelUtils.makeActionLabel()
-	self._label:SetSize(24)
-	self._label:SetWeight(Enum.FontWeight.Medium)
+	self._label = WxLabelUtils.makeBodyLabel()
+	self._label:SetLineHeight(1)
 	self._label:SetText("Toggle!")
-	self._label:SetTransparency(0.2)
-	self._label:SetColor(Color3.new(0, 0, 0))
 	self._maid:GiveTask(self._label)
 
 	self._maid:GiveTask(self:_render():Subscribe(function(gui)
@@ -52,7 +49,7 @@ function WxToggle:ObserveState()
 end
 
 function WxToggle:_render()
-	local FIXED_HEIGHT = 40
+	local FIXED_HEIGHT = 24 + 8
 
 	return Blend.New("TextButton")({
 		Text = "",
@@ -73,7 +70,7 @@ function WxToggle:_render()
 				BackgroundColor3 = Color3.new(1, 1, 1),
 				[FrondAttrs.WidthP] = 1,
 				[FrondAttrs.HeightP] = 1,
-				[FrondAttrs.Padding] = 7,
+				[FrondAttrs.Padding] = 5,
 				Blend.New("ImageLabel")({
 					[FrondAttrs.WidthP] = 1,
 					[FrondAttrs.HeightP] = 1,

@@ -101,7 +101,7 @@ function WxCombo:_renderDropdownContents()
 		local maid = brio:ToMaid()
 		local option = brio:GetValue()
 
-		local EDGE_PAD_WIDTH = 48
+		local EDGE_PAD_WIDTH = 44
 
 		local model = ButtonHighlightModel.new()
 		maid:GiveTask(model)
