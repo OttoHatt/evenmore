@@ -8,6 +8,7 @@ local RxFrondUtils = require("RxFrondUtils")
 local WxColorDropdown = require("WxColorDropdown")
 local WxDialog = require("WxDialog")
 local WxLabelUtils = require("WxLabelUtils")
+local WxSlider = require("WxSlider")
 local WxToggle = require("WxToggle")
 
 return function(target)
@@ -41,12 +42,12 @@ return function(target)
 	-- 	}
 	-- }))
 
-	do
-		local label = WxLabelUtils.makeSubTitleLabel()
-		label:SetText("Settings")
-		label.Gui.Parent = dialog:GetBodySlot()
-		maid:GiveTask(label)
-	end
+	-- do
+	-- 	local label = WxLabelUtils.makeSubTitleLabel()
+	-- 	label:SetText("Settings")
+	-- 	label.Gui.Parent = dialog:GetBodySlot()
+	-- 	maid:GiveTask(label)
+	-- end
 	do
 		local TITLES = table.freeze({
 			"Enable sound effects",
@@ -85,6 +86,11 @@ return function(target)
 	-- 	end))
 	-- 	maid:GiveTask(toggle)
 	-- end
+	do
+		local a = WxSlider.new()
+		a.Gui.Parent = dialog:GetBodySlot()
+		maid:GiveTask(a)
+	end
 
 	debug.profileend()
 

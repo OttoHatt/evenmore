@@ -1,36 +1,33 @@
 --[=[
-	@class WxToggle
+	@class WxSlider
 
 	Toggleable switch element.
 ]=]
 
 local require = require(script.Parent.loader).load(script)
 
-local IMAGE_X = "rbxassetid://13794478132"
-local IMAGE_CHECK = "rbxassetid://13818721938"
-
 local BaseObject = require("BaseObject")
 local Blend = require("Blend")
 local FrondAttrs = require("FrondAttrs")
 local FrondConstants = require("FrondConstants")
-local ValueObject = require("ValueObject")
 local WxLabelUtils = require("WxLabelUtils")
 local WxNeoColors = require("WxNeoColors")
+local SliderModel = require("SliderModel")
 
-local WxToggle = setmetatable({}, BaseObject)
-WxToggle.ClassName = "WxToggle"
-WxToggle.__index = WxToggle
+local WxSlider = setmetatable({}, BaseObject)
+WxSlider.ClassName = "WxSlider"
+WxSlider.__index = WxSlider
 
-function WxToggle.new(obj)
-	local self = setmetatable(BaseObject.new(obj), WxToggle)
-
-	self._stateValue = ValueObject.new(false, "boolean")
-	self._maid:GiveTask(self._stateValue)
+function WxSlider.new(obj)
+	local self = setmetatable(BaseObject.new(obj), WxSlider)
 
 	self._label = WxLabelUtils.makeBodyLabel()
 	self._label:SetLineHeight(1)
-	self._label:SetText("Toggle!")
+	self._label:SetText("Slider!")
 	self._maid:GiveTask(self._label)
+
+	self._sliderModel = SliderModel.new()
+	self._maid:GiveTask(self._sliderModel)
 
 	self._maid:GiveTask(self:_render():Subscribe(function(gui)
 		self.Gui = gui
@@ -39,22 +36,29 @@ function WxToggle.new(obj)
 	return self
 end
 
-function WxToggle:SetText(text: string)
+function WxSlider:SetText(text: string)
 	self._label:SetText(text)
 end
 
-function WxToggle:ObserveState()
-	return self._stateValue:Observe()
+function WxSlider:ObserveValue()
+	return self._sliderModel:ObserveValue()
 end
 
-function WxToggle:_render()
+function WxSlider:SetValue(value: number)
+	self._sliderModel:SetValue(value)
+end
+
+function WxSlider:_render()
+	local FIXED_WIDTH = 256
 	local FIXED_HEIGHT = 24 + 8
+
+	local observeSmoothedValue = Blend.Spring(self:ObserveValue(), 100, 1)
 
 	return Blend.New("TextButton")({
 		Text = "",
 		BackgroundTransparency = 1,
-		[Blend.OnEvent("Activated")] = function()
-			self._stateValue.Value = not self._stateValue.Value
+		[Blend.Instance] = function(instance: Instance)
+			self._sliderModel:SetCatchElement(instance)
 		end,
 		[FrondAttrs.Height] = FIXED_HEIGHT,
 		[FrondAttrs.FlowDirection] = FrondConstants.DIRECTION_ROW,
@@ -63,22 +67,20 @@ function WxToggle:_render()
 		Blend.New("Frame")({
 			BackgroundColor3 = WxNeoColors.nudes[900],
 			BackgroundTransparency = 1 - 0.95,
-			[FrondAttrs.Size] = FIXED_HEIGHT,
+			[FrondAttrs.Width] = FIXED_WIDTH,
+			[FrondAttrs.HeightP] = 1,
 			[FrondAttrs.Padding] = 2,
 			Blend.New("Frame")({
 				BackgroundColor3 = Color3.new(1, 1, 1),
 				[FrondAttrs.WidthP] = 1,
 				[FrondAttrs.HeightP] = 1,
-				[FrondAttrs.Padding] = 5,
-				Blend.New("ImageLabel")({
-					[FrondAttrs.WidthP] = 1,
-					[FrondAttrs.HeightP] = 1,
-					ImageColor3 = Blend.Computed(self._stateValue, function(checked: boolean)
-						return if checked then WxNeoColors.success[400] else WxNeoColors.danger[400]
-					end),
-					BackgroundTransparency = 1,
-					Image = Blend.Computed(self._stateValue, function(checked: boolean)
-						return if checked then IMAGE_CHECK else IMAGE_X
+				[Blend.Instance] = function(instance: Instance)
+					self._sliderModel:SetReferenceElement(instance)
+				end,
+				Blend.New("Frame")({
+					BackgroundColor3 = WxNeoColors.primary[500],
+					Size = Blend.Computed(observeSmoothedValue, function(value: number)
+						return UDim2.fromScale(value, 1)
 					end),
 				}),
 			}),
@@ -87,4 +89,4 @@ function WxToggle:_render()
 	})
 end
 
-return WxToggle
+return WxSlider
