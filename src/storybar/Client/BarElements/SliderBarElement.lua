@@ -14,15 +14,11 @@
 
 local require = require(script.Parent.loader).load(script)
 
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-
 local BaseBarElement = require("BaseBarElement")
-local Blend = require("Blend")
-local RxValueBaseUtils = require("RxValueBaseUtils")
-local TextServiceUtils = require("TextServiceUtils")
-local RxInstanceUtils = require("RxInstanceUtils")
 local BaseBarElementUtils = require("BaseBarElementUtils")
+local Blend = require("Blend")
+local SliderModel = require("SliderModel")
+local TextServiceUtils = require("TextServiceUtils")
 
 local SwitchBarElement = setmetatable({}, BaseBarElement)
 SwitchBarElement.ClassName = "SwitchBarElement"
@@ -35,38 +31,17 @@ function SwitchBarElement.new(serviceBag, initialValue: number)
 	self._labelText.Value = "Slider"
 	self._maid:GiveTask(self._labelText)
 
-	self._value = Instance.new("NumberValue")
-	self._value.Value = initialValue or 0
-	self._maid:GiveTask(self._value)
+	self._label = Instance.new("ObjectValue")
+	self._maid:GiveTask(self._label)
 
 	self._slider = Instance.new("ObjectValue")
 	self._maid:GiveTask(self._slider)
 
-	self._label = Instance.new("ObjectValue")
-	self._maid:GiveTask(self._label)
-
-	self._acceptingInput = Instance.new("BoolValue")
-	self._maid:GiveTask(self._acceptingInput)
+	self._sliderModel = SliderModel.new()
+	self._sliderModel:SetValue(initialValue or 0)
+	self._maid:GiveTask(self._sliderModel)
 
 	self._maid:GiveTask(self:_render(self.Gui))
-
-	self._maid:GiveTask(RxInstanceUtils.observeFirstAncestorBrio(self.Gui, "LayerCollector"):Subscribe(function(brio)
-		local collector: Instance = brio:GetValue()
-		local maid = brio:ToMaid()
-		if collector:IsA("PluginGui") then
-			self:_updateMouse(collector:GetRelativeMousePosition())
-			maid:GiveTask(RunService.RenderStepped:Connect(function()
-				self:_updateMouse(collector:GetRelativeMousePosition())
-			end))
-		elseif collector:IsA("ScreenGui") then
-			self:_updateMouse(UserInputService:GetMouseLocation())
-			maid:GiveTask(UserInputService.InputChanged:Connect(function(inputObject: InputObject)
-				if inputObject.UserInputType == Enum.UserInputType.MouseMovement then
-					self:_updateMouse(UserInputService:GetMouseLocation())
-				end
-			end))
-		end
-	end))
 
 	self:_updateLayout()
 	self._maid:GiveTask(self.Gui.AncestryChanged:Connect(function()
@@ -76,32 +51,13 @@ function SwitchBarElement.new(serviceBag, initialValue: number)
 	return self
 end
 
-function SwitchBarElement:_updateMouse(rawPosition: Vector2 & Vector3)
-	if self._acceptingInput.Value then
-		local pos = Vector2.new(rawPosition.X, rawPosition.Y)
-		local slider = self._slider.Value
-		local off = pos - slider.AbsolutePosition
-		local fac = math.clamp(off.X / slider.AbsoluteSize.X, 0, 1)
-		self:SetValue(fac)
-	end
-end
-
 --[=[
 	Observe the slider's value.
 	@within SliderBarElement
 	@return Observable<number>
 ]=]
 function SwitchBarElement:Observe()
-	return RxValueBaseUtils.observeValue(self._value)
-end
-
---[=[
-	Set the label text.
-	@within SliderBarElement
-	@param text string
-]=]
-function SwitchBarElement:SetLabel(text: string)
-	self._labelText.Value = text
+	return self._sliderModel:ObserveValue()
 end
 
 --[=[
@@ -111,7 +67,7 @@ end
 	@return number
 ]=]
 function SwitchBarElement:SetValue(value: number)
-	self._value.Value = value
+	self._sliderModel:SetValue(value)
 end
 
 --[=[
@@ -120,7 +76,16 @@ end
 	@return number
 ]=]
 function SwitchBarElement:GetValue()
-	return self._value.Value
+	return self._sliderModel:GetValue()
+end
+
+--[=[
+	Set the label text.
+	@within SliderBarElement
+	@param text string
+]=]
+function SwitchBarElement:SetLabel(text: string)
+	self._labelText.Value = text
 end
 
 function SwitchBarElement:_updateLayout()
@@ -140,71 +105,60 @@ end
 
 function SwitchBarElement:_render(gui: Instance)
 	return Blend.mount(gui, {
-		[Blend.Children] = {
-			Blend.New("TextButton")({
-				Active = true,
+		Blend.New("TextButton")({
+			Active = true,
+			Size = UDim2.new(1, 0, 1, 0),
+			BackgroundTransparency = 1,
+			[Blend.Instance] = function(instance: Instance)
+				self._sliderModel:SetCatchElement(instance)
+			end,
+			self:RenderPadding(),
+			Blend.New("TextLabel")({
+				AnchorPoint = Vector2.new(0, 0.5),
+				BackgroundTransparency = 1,
+				Font = Enum.Font.FredokaOne,
+				FontSize = Enum.FontSize.Size18,
+				Position = UDim2.new(0, 0, 0.5, 0),
+				Size = UDim2.new(1, 0, 1, 0),
+				Text = self._labelText,
+				TextColor3 = self._colorTheming:ObserveColor("Glyph"),
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextYAlignment = Enum.TextYAlignment.Center,
+				[Blend.Instance] = self._label,
+			}),
+			Blend.New("Frame")({
 				Size = UDim2.new(1, 0, 1, 0),
 				BackgroundTransparency = 1,
-				[Blend.OnEvent("InputBegan")] = function(inputObject: InputObject)
-					if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-						self._acceptingInput.Value = true
-						self:_updateMouse(inputObject.Position)
-						self._maid._cancel = inputObject.Changed:Connect(function()
-							if inputObject.UserInputState == Enum.UserInputState.End then
-								self._maid._cancel = nil
-								self._acceptingInput.Value = false
-								self:_updateMouse(inputObject.Position)
-							end
-						end)
-					end
+				[Blend.Instance] = function(instance: Instance)
+					self._sliderModel:SetReferenceElement(instance)
+					self._slider.Value = instance
 				end,
-				[Blend.Children] = {
-					self:RenderPadding(),
-					Blend.New("TextLabel")({
-						AnchorPoint = Vector2.new(0, 0.5),
-						BackgroundTransparency = 1,
-						Font = Enum.Font.FredokaOne,
-						FontSize = Enum.FontSize.Size18,
-						Position = UDim2.new(0, 0, 0.5, 0),
-						Size = UDim2.new(1, 0, 1, 0),
-						Text = self._labelText,
-						TextColor3 = self._colorTheming:ObserveColor("Glyph"),
-						TextXAlignment = Enum.TextXAlignment.Left,
-						TextYAlignment = Enum.TextYAlignment.Center,
-						[Blend.Instance] = self._label,
+
+				Blend.New("Frame")({
+					AnchorPoint = Vector2.new(0, 0.5),
+					Position = UDim2.new(0, 0, 0.5, 0),
+					Size = UDim2.new(1, 0, 0, 2),
+					BackgroundColor3 = self._colorTheming:ObserveColor("Glyph"),
+				}),
+				Blend.New("Frame")({
+					AnchorPoint = Vector2.new(0.5, 0.5),
+					Size = UDim2.new(0, 12, 0, 12),
+					BackgroundColor3 = BaseBarElementUtils.observePrimaryColor(
+						self._colorTheming,
+						self._sliderModel:ObserveInputActive()
+					),
+					Position = Blend.Spring(
+						Blend.Computed(self:Observe(), function(value)
+							return UDim2.new(value, 0, 0.5, 0)
+						end),
+						150
+					),
+					Blend.New("UICorner")({
+						CornerRadius = UDim.new(0, 999),
 					}),
-					Blend.New("Frame")({
-						Size = UDim2.new(1, 0, 1, 0),
-						BackgroundTransparency = 1,
-						[Blend.Instance] = self._slider,
-						[Blend.Children] = {
-							Blend.New("Frame")({
-								AnchorPoint = Vector2.new(0, 0.5),
-								Position = UDim2.new(0, 0, 0.5, 0),
-								Size = UDim2.new(1, 0, 0, 2),
-								BackgroundColor3 = self._colorTheming:ObserveColor("Glyph"),
-							}),
-							Blend.New("Frame")({
-								AnchorPoint = Vector2.new(0.5, 0.5),
-								Size = UDim2.new(0, 12, 0, 12),
-								BackgroundColor3 = BaseBarElementUtils.observePrimaryColor(self._colorTheming, self._acceptingInput),
-								Position = Blend.Spring(
-									Blend.Computed(self._value, function(value)
-										return UDim2.new(value, 0, 0.5, 0)
-									end),
-									150
-								),
-								[Blend.Children] = {
-									Blend.New("UICorner")({
-										CornerRadius = UDim.new(0, 999),
-									}),
-								},
-							}),
-						},
-					}),
-				},
+				}),
 			}),
-		},
+		}),
 	})
 end
 
