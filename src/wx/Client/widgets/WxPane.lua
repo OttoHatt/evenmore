@@ -1,7 +1,7 @@
 --[=[
 	@class WxPane
 
-
+	Container with window chrome.
 ]=]
 
 local require = require(script.Parent.loader).load(script)
